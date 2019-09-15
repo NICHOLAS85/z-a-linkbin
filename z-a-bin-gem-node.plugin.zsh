@@ -22,7 +22,7 @@ autoload :za-bgn-atload-handler :za-bgn-atclone-handler \
     :za-bgn-help-null-handler
 
 @zplg-register-annex "z-a-bin-gem-node" \
-    hook:atpull \
-    :za-bgn-atpull-handler \
+    hook:%atpull \
+    :za-bgn-atclone-handler \
     :za-bgn-help-null-handler
 
