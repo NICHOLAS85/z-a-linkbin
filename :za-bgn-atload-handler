@@ -43,6 +43,26 @@ setopt extendedglob warncreateglobal typesetsilent noshortloops
     return 0
 } # }}}
 
+if [[ -n "${ZPLG_ICE[gem]}" ]] {
+    local -a gems srcdst
+    gems=( "${(s.;.)ZPLG_ICE[gem]}" )
+
+    local gem
+    integer add_fbin
+
+    for gem ( $gems ) {
+        srcdst=( ${(@s.->.)gem} )
+        srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
+        [[ ${srcdst[1]} = \!* ]] && add_fbin=1 || add_fbin=0
+        srcdst[1]=${srcdst[1]#\!}
+
+        if (( add_fbin )); then
+            local target_binary="g:$dir/bin/${srcdst[1]}"
+            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[2]:-${srcdst[1]}}"
+        fi
+    }
+}
+
 if [[ -n "${ZPLG_ICE[fbin]}" ]] {
     local -a fbins srcdst
     fbins=( "${(s.;.)ZPLG_ICE[fbin]}" )
