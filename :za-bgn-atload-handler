@@ -57,7 +57,6 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         srcdst[1]=${srcdst[1]#g:}
         
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
-        print $target_binary
 
         eval "
         function ${srcdst[2]:-${srcdst[1]:t}} {
