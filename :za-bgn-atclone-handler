@@ -10,7 +10,6 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
     gems=( "${(s.;.)ZPLG_ICE[gem]}" )
 
     local gem
-    integer add_fbin
 
     for gem ( $gems ) {
         srcdst=( ${(@s.->.)gem} )
