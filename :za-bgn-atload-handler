@@ -43,6 +43,10 @@ setopt extendedglob warncreateglobal typesetsilent noshortloops
     return 0
 } # }}}
 
+#
+# gem'' ice
+#
+
 if [[ -n "${ZPLG_ICE[gem]}" ]] {
     local -a gems srcdst
     gems=( "${(s.;.)ZPLG_ICE[gem]}" )
@@ -62,6 +66,11 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         fi
     }
 }
+
+#
+# fbin'' ice – also inheriting any exclamation-mark gems
+# or node modules
+#
 
 if [[ -n "${ZPLG_ICE[fbin]}" ]] {
     local -a fbins srcdst
