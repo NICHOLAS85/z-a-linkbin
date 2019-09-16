@@ -15,9 +15,9 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         srcdst=( ${(@s.->.)gem} )
         tmpsdst=( ${(@s.<-.)srcdst[1]} )
         if (( ${#tmpsdst} > 1 )); then
-            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]:-${srcdst[1]}}" )
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
         else
-            srcdst=( "${tmpsdst[1]}" "${tmpsdst[1]}" "${srcdst[2]:-${srcdst[1]}}" )
+            srcdst=( "${tmpsdst[1]#\!}" "${tmpsdst[1]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
         fi
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         srcdst[2]=${srcdst[2]#\!}
@@ -41,9 +41,9 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         srcdst=( ${(@s.->.)node} )
         tmpsdst=( ${(@s.<-.)srcdst[1]} )
         if (( ${#tmpsdst} > 1 )); then
-            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]:-${srcdst[1]}}" )
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
         else
-            srcdst=( "${tmpsdst[1]}" "${tmpsdst[1]}" "${srcdst[2]:-${srcdst[1]}}" )
+            srcdst=( "${tmpsdst[1]#\!}" "${tmpsdst[1]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
         fi
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         srcdst[2]=${srcdst[2]#\!}
