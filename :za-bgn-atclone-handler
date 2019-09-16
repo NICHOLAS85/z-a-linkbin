@@ -23,9 +23,9 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         srcdst[2]=${srcdst[2]#\!}
 
         if [[ "$hook" = *atclone ]]; then
-            command gem install -i "$dir" "${srcdst[2]}"
+            command gem install -q -i "$dir" "${srcdst[2]}"
         elif [[ "$hook" = *atpull ]]; then
-            command gem update -i "$dir" "${srcdst[2]}"
+            command gem update -q -i "$dir" "${srcdst[2]}"
         fi
     }
 }
@@ -49,14 +49,14 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         srcdst[2]=${srcdst[2]#\!}
 
         if [[ "$hook" = *atclone ]]; then
-            ( builtin cd -q "$dir" && command npm install "${srcdst[2]}" )
+            ( builtin cd -q "$dir" && command npm --silent install "${srcdst[2]}" )
         elif [[ "$hook" = *atpull ]]; then
             perform_update=1
             break
         fi
     }
 
-    (( perform_update )) && ( builtin cd -q "$dir" && command npm update )
+    (( perform_update )) && ( builtin cd -q "$dir" && command npm --silent update )
 }
 
 # vim:ft=zsh:sw=4:sts=4:et
