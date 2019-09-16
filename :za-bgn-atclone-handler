@@ -5,6 +5,8 @@ setopt extendedglob warncreateglobal typesetsilent noshortloops
     local type="$1" user="$2" plugin="$3" id_as="$4" dir="$5" hook="$6" || \
     local type="$1" url="$2" id_as="$3" dir="$4" hook="$5"
 
+local nl=$'\n'
+
 if [[ -n "${ZPLG_ICE[gem]}" ]] {
     local -a gems srcdst tmpsdst
     gems=( "${(s.;.)ZPLG_ICE[gem]}" )
@@ -57,6 +59,36 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
     }
 
     (( perform_update )) && ( builtin cd -q "$dir" && command npm --silent update )
+}
+
+#
+# sbin'' ice – creation of shims (the name borrowed from rbenv)
+#
+
+if [[ -n "${ZPLG_ICE[sbin]}" ]] {
+    local -a sbins srcdst
+    sbins=( "${(s.;.)ZPLG_ICE[sbin]}" )
+
+    local sbin
+    integer set_gem_home set_node_path
+
+    for sbin ( $sbins ) {
+        srcdst=( ${(@s.->.)sbin} )
+        srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
+        [[ ${srcdst[1]} = (g|ng|gn):* ]] && set_gem_home=1 || set_gem_home=0
+        [[ ${srcdst[1]} = (n|gn|ng):* ]] && set_node_path=1 || set_node_path=0
+        srcdst[1]=${srcdst[1]#(n|g|gn|ng):}
+
+        local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
+            fnam="${srcdst[2]:-${srcdst[1]:t}}"
+
+        .za-bgn-function-body "$fnam" \
+                    "$target_binary" "$dir" "$set_gem_home" \
+                    "$set_node_path"
+        print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
+            >! "$ZPFX/bin/$fnam"
+        chmod +x "$ZPFX/bin/$fnam"
+    }
 }
 
 # vim:ft=zsh:sw=4:sts=4:et

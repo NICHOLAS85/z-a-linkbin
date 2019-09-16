@@ -14,7 +14,7 @@ autoload :za-bgn-atload-handler :za-bgn-atclone-handler \
     hook:atload \
     :za-bgn-atload-handler \
     :za-bgn-help-handler \
-    "fbin''|gem''|node''" # also register new ices
+    "fbin''|sbin''|gem''|node''" # also register new ices
 
 @zplg-register-annex "z-a-bin-gem-node" \
     hook:atclone \
