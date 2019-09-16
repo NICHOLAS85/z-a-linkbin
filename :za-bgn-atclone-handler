@@ -8,12 +8,12 @@ setopt extendedglob warncreateglobal typesetsilent noshortloops
 local nl=$'\n'
 
 if [[ -n "${ZPLG_ICE[gem]}" ]] {
-    local -a gems srcdst tmpsdst
-    gems=( "${(s.;.)ZPLG_ICE[gem]}" )
+    local -a gem_defs srcdst tmpsdst gems
+    gem_defs=( "${(s.;.)ZPLG_ICE[gem]}" )
 
     local gem
 
-    for gem ( $gems ) {
+    for gem ( $gem_defs ) {
         srcdst=( ${(@s.->.)gem} )
         tmpsdst=( ${(@s.<-.)srcdst[1]} )
         if (( ${#tmpsdst} > 1 )); then
@@ -24,22 +24,26 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         srcdst[2]=${srcdst[2]#\!}
 
+        gems+=( ${srcdst[2]} )
+    }
+
+    (( ${#gems} )) && {
         if [[ "$hook" = *atclone ]]; then
-            command gem install -q -i "$dir" "${srcdst[2]}"
+            command gem install -q -i "$dir" "${gems[@]}"
         elif [[ "$hook" = *atpull ]]; then
-            command gem update -q -i "$dir" "${srcdst[2]}"
+            command gem update -q -i "$dir" "${gems[@]}"
         fi
     }
 }
 
 if [[ -n "${ZPLG_ICE[node]}" ]] {
-    local -a nodes srcdst tmpsdst
-    nodes=( "${(s.;.)ZPLG_ICE[node]}" )
+    local -a node_defs srcdst tmpsdst mods
+    node_defs=( "${(s.;.)ZPLG_ICE[node]}" )
 
     local node
     integer perform_update=0
 
-    for node ( $nodes ) {
+    for node ( $node_defs ) {
         srcdst=( ${(@s.->.)node} )
         tmpsdst=( ${(@s.<-.)srcdst[1]} )
         if (( ${#tmpsdst} > 1 )); then
@@ -51,14 +55,18 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         srcdst[2]=${srcdst[2]#\!}
 
         if [[ "$hook" = *atclone ]]; then
-            ( builtin cd -q "$dir" && command npm --silent install "${srcdst[2]}" )
-        elif [[ "$hook" = *atpull ]]; then
+            mods+=( ${srcdst[2]} )
+        elif [[ "$hook" = *atpull && -n ${srcdst[2]} ]]; then
             perform_update=1
             break
         fi
     }
 
-    (( perform_update )) && ( builtin cd -q "$dir" && command npm --silent update )
+    (( ${#mods} )) && \
+        ( builtin cd -q "$dir" && command npm --silent install "${mods[@]}" )
+
+    (( perform_update )) && \
+        ( builtin cd -q "$dir" && command npm --silent update )
 }
 
 #
