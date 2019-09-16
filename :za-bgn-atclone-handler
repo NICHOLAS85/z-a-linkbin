@@ -6,26 +6,32 @@ setopt extendedglob warncreateglobal typesetsilent noshortloops
     local type="$1" url="$2" id_as="$3" dir="$4" hook="$5"
 
 if [[ -n "${ZPLG_ICE[gem]}" ]] {
-    local -a gems srcdst
+    local -a gems srcdst tmpsdst
     gems=( "${(s.;.)ZPLG_ICE[gem]}" )
 
     local gem
 
     for gem ( $gems ) {
         srcdst=( ${(@s.->.)gem} )
+        tmpsdst=( ${(@s.<-.)srcdst[1]} )
+        if (( ${#tmpsdst} > 1 )); then
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]}" )
+        else
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[1]}" "${srcdst[2]}" )
+        fi
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        srcdst[1]=${srcdst[1]#\!}
+        srcdst[2]=${srcdst[2]#\!}
 
         if [[ "$hook" = *atclone ]]; then
-            command gem install -i "$dir" "${srcdst[1]}"
+            command gem install -i "$dir" "${srcdst[2]}"
         elif [[ "$hook" = *atpull ]]; then
-            command gem update -i "$dir" "${srcdst[1]}"
+            command gem update -i "$dir" "${srcdst[2]}"
         fi
     }
 }
 
 if [[ -n "${ZPLG_ICE[node]}" ]] {
-    local -a nodes srcdst
+    local -a nodes srcdst tmpsdst
     nodes=( "${(s.;.)ZPLG_ICE[node]}" )
 
     local node
@@ -33,11 +39,17 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 
     for node ( $nodes ) {
         srcdst=( ${(@s.->.)node} )
+        tmpsdst=( ${(@s.<-.)srcdst[1]} )
+        if (( ${#tmpsdst} > 1 )); then
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]}" )
+        else
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[1]}" "${srcdst[2]}" )
+        fi
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        srcdst[1]=${srcdst[1]#\!}
+        srcdst[2]=${srcdst[2]#\!}
 
         if [[ "$hook" = *atclone ]]; then
-            ( builtin cd -q "$dir" && command npm install "${srcdst[1]}" )
+            ( builtin cd -q "$dir" && command npm install "${srcdst[2]}" )
         elif [[ "$hook" = *atpull ]]; then
             perform_update=1
             break
