@@ -49,13 +49,15 @@ local nl=$'\n'
 # Returns the body of the function wrapping a binary
 .za-bgn-bin-function-body() {
     local name="$1" bin="$2" dir="$3"
-    integer set_gem_home="$4" set_node_path="$5"
+    integer set_gem_home="$4" set_node_path="$5" set_cwd="$6"
 
     REPLY="function $name {
     local bindir=${(qqq)bin:h}
     ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
     ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
+    ${${(M)set_cwd:#1}:+pushd -q ${(qqq)dir}}
     \"\$bindir\"/${(qqq)bin:t} \"\$@\"
+    ${${(M)set_cwd:#1}:+popd -q}
 }"
 }
 # }}}
@@ -64,7 +66,7 @@ local nl=$'\n'
 # Returns the body of the function wrapping a function
 .za-bgn-mod-function-body() {
     local name="$1" target_func="$2" dir="$3"
-    integer set_gem_home="$4" set_node_path="$5"
+    integer set_gem_home="$4" set_node_path="$5" set_cwd="$6"
 
     if [[ "$name" = "$target_func" ]]; then
         target_func="${target_func}--za-bgn-orig"
@@ -74,7 +76,9 @@ local nl=$'\n'
     REPLY="function $name {
     ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
     ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
+    ${${(M)set_cwd:#1}:+pushd -q ${(qqq)dir}}
     ${(qqq)target_func} \"\$@\"
+    ${${(M)set_cwd:#1}:+popd -q}
 }"
 }
 # }}}
@@ -149,20 +153,21 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
     fbins=( "${(s.;.)ZPLG_ICE[fbin]}" )
 
     local fbin
-    integer set_gem_home set_node_path
+    integer set_gem_home set_node_path set_cwd
 
     for fbin ( $fbins ) {
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         [[ ${srcdst[1]} = [^[:blank:]]#g[^[:blank:]]#:* ]] && set_gem_home=1
         [[ ${srcdst[1]} = [^[:blank:]]#n[^[:blank:]]#:* ]] && set_node_path=1
+        [[ ${srcdst[1]} = [^[:blank:]]#c[^[:blank:]]#:* ]] && set_cwd=1
         srcdst[1]=${srcdst[1]#[a-z]#:}
         
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
 
         .za-bgn-bin-function-body "${srcdst[2]:-${srcdst[1]:t}}" \
                        "$target_binary" "$dir" "$set_gem_home" \
-                       "$set_node_path"
+                       "$set_node_path" "$set_cwd"
         eval "$REPLY"
     }
 }
@@ -176,20 +181,21 @@ if [[ -n "${ZPLG_ICE[fmod]}" ]] {
     fmods=( "${(s.;.)ZPLG_ICE[fmod]}" )
 
     local fmod
-    integer set_gem_home set_node_path
+    integer set_gem_home set_node_path set_cwd
 
     for fmod ( $fmods ) {
         srcdst=( ${(@s.->.)fmod} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         [[ ${srcdst[1]} = [^[:blank:]]#g[^[:blank:]]#:* ]] && set_gem_home=1
         [[ ${srcdst[1]} = [^[:blank:]]#n[^[:blank:]]#:* ]] && set_node_path=1
+        [[ ${srcdst[1]} = [^[:blank:]]#c[^[:blank:]]#:* ]] && set_cwd=1
         srcdst[1]=${srcdst[1]#[a-z]#:}
         
         local target_function="${srcdst[1]}"
 
         .za-bgn-mod-function-body "${srcdst[2]:-${srcdst[1]}}" \
                        "$target_function" "$dir" "$set_gem_home" \
-                       "$set_node_path"
+                       "$set_node_path" "$set_cwd"
         eval "$REPLY"
     }
 }
