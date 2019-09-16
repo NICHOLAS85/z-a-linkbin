@@ -81,13 +81,19 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
 
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
             fnam="${srcdst[2]:-${srcdst[1]:t}}"
+        local file="$ZPFX/bin/$fnam"
 
         .za-bgn-function-body "$fnam" \
                     "$target_binary" "$dir" "$set_gem_home" \
                     "$set_node_path"
-        print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
-            >! "$ZPFX/bin/$fnam"
-        chmod +x "$ZPFX/bin/$fnam"
+        builtin print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
+            >! "$file"
+        command chmod +x "$file"
+        if [[ -x $file ]]; then
+            print -P -- "%F{38}bin-gem-node annex: %F{154}Correctly created the %F{220}$fnam%F{154} shim%f"
+        else
+            print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong creating the %F{220}$fnam%F{160} shim%f"
+        fi
     }
 }
 
