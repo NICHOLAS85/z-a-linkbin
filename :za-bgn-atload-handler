@@ -62,7 +62,7 @@ local nl=$'\n'
 #
 
 if [[ -n "${ZPLG_ICE[gem]}" ]] {
-    local -a gems srcdst
+    local -a gems srcdst tmpsdst
     gems=( "${(s.;.)ZPLG_ICE[gem]}" )
 
     local gem
@@ -70,13 +70,19 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
 
     for gem ( $gems ) {
         srcdst=( ${(@s.->.)gem} )
+        tmpsdst=( ${(@s.<-.)srcdst[1]} )
+        if (( ${#tmpsdst} > 1 )); then
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
+        else
+            srcdst=( "${tmpsdst[1]#\!}" "${tmpsdst[1]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
+        fi
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = \!* ]] && add_fbin=1 || add_fbin=0
-        srcdst[1]=${srcdst[1]#\!}
+        [[ ${srcdst[2]} = \!* ]] && add_fbin=1 || add_fbin=0
+        srcdst[2]=${srcdst[2]#\!}
 
         if (( add_fbin )); then
             local target_binary="g:$dir/bin/${srcdst[1]}"
-            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[2]:-${srcdst[1]}}"
+            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
         fi
     }
 }
