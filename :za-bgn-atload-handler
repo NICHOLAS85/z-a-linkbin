@@ -68,6 +68,30 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
 }
 
 #
+# node'' ice
+#
+
+if [[ -n "${ZPLG_ICE[node]}" ]] {
+    local -a nodes srcdst
+    nodes=( "${(s.;.)ZPLG_ICE[node]}" )
+
+    local node
+    integer add_fbin
+
+    for node ( $nodes ) {
+        srcdst=( ${(@s.->.)node} )
+        srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
+        [[ ${srcdst[1]} = \!* ]] && add_fbin=1 || add_fbin=0
+        srcdst[1]=${srcdst[1]#\!}
+
+        if (( add_fbin )); then
+            local target_binary="n:$dir/node_modules/.bin/${srcdst[1]}"
+            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[2]:-${srcdst[1]}}"
+        fi
+    }
+}
+
+#
 # fbin'' ice – also inheriting any exclamation-mark gems
 # or node modules
 #
@@ -77,13 +101,14 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
     fbins=( "${(s.;.)ZPLG_ICE[fbin]}" )
 
     local fbin
-    integer set_gem_home
+    integer set_gem_home set_node_path
 
     for fbin ( $fbins ) {
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = g:* ]] && set_gem_home=1 || set_gem_home=0
-        srcdst[1]=${srcdst[1]#g:}
+        [[ ${srcdst[1]} = (g|ng|gn):* ]] && set_gem_home=1 || set_gem_home=0
+        [[ ${srcdst[1]} = (n|gn|ng):* ]] && set_node_path=1 || set_node_path=0
+        srcdst[1]=${srcdst[1]#(n|g|gn|ng):}
         
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
 
@@ -91,6 +116,7 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         function ${srcdst[2]:-${srcdst[1]:t}} {
             local bindir=${(qqq)target_binary:h}
             ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
+            ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}}/node_modules
             \"\$bindir\"/${(qqq)target_binary:t} \"\$@\"
         }"
     }
