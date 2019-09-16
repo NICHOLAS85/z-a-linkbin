@@ -137,9 +137,4 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
     }
 }
 
-        eval "
-        }"
-    }
-}
-
 # vim:ft=zsh:sw=4:sts=4:et
