@@ -94,11 +94,13 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
         .za-bgn-function-body "$fnam" \
                     "$target_binary" "$dir" "$set_gem_home" \
                     "$set_node_path"
+
         builtin print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
             >! "$file"
         command chmod +x "$file"
+
         if [[ -x $file ]]; then
-            print -P -- "%F{38}bin-gem-node annex: %F{154}Correctly created the %F{220}$fnam%F{154} shim%f"
+            print -P -- "%F{38}bin-gem-node annex: %F{154}Created the %F{220}$fnam%F{154} shim%f"
         else
             print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong creating the %F{220}$fnam%F{160} shim%f"
         fi
