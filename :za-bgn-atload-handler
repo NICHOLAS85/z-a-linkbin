@@ -72,7 +72,7 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
 #
 
 if [[ -n "${ZPLG_ICE[node]}" ]] {
-    local -a nodes srcdst
+    local -a nodes srcdst tmpsdst
     nodes=( "${(s.;.)ZPLG_ICE[node]}" )
 
     local node
@@ -80,13 +80,19 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 
     for node ( $nodes ) {
         srcdst=( ${(@s.->.)node} )
+        tmpsdst=( ${(@s.<-.)srcdst[1]} )
+        if (( ${#tmpsdst} > 1 )); then
+            srcdst=( "${tmpsdst[1]}" "${tmpsdst[2]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
+        else
+            srcdst=( "${tmpsdst[1]#\!}" "${tmpsdst[1]}" "${srcdst[2]:-${srcdst[1]#\!}}" )
+        fi
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = \!* ]] && add_fbin=1 || add_fbin=0
-        srcdst[1]=${srcdst[1]#\!}
+        [[ ${srcdst[2]} = \!* ]] && add_fbin=1 || add_fbin=0
+        srcdst[2]=${srcdst[2]#\!}
 
         if (( add_fbin )); then
             local target_binary="n:$dir/node_modules/.bin/${srcdst[1]}"
-            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[2]:-${srcdst[1]}}"
+            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
         fi
     }
 }
