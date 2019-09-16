@@ -43,6 +43,18 @@ setopt extendedglob warncreateglobal typesetsilent noshortloops
     return 0
 } # }}}
 
+.za-bgn-function-body() {
+    local name="$1" bin="$2" dir="$3"
+    integer set_gem_home="$4" set_node_path="$5"
+
+    REPLY="function $name {
+    local bindir=${(qqq)bin:h}
+    ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
+    ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
+    \"\$bindir\"/${(qqq)bin:t} \"\$@\"
+}"
+}
+
 #
 # gem'' ice
 #
@@ -118,12 +130,14 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
 
+        .za-bgn-function-body "${srcdst[2]:-${srcdst[1]:t}}" \
+                       "$target_binary" "$dir" "$set_gem_home" \
+                       "$set_node_path"
+        eval "$REPLY"
+    }
+}
+
         eval "
-        function ${srcdst[2]:-${srcdst[1]:t}} {
-            local bindir=${(qqq)target_binary:h}
-            ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
-            ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
-            \"\$bindir\"/${(qqq)target_binary:t} \"\$@\"
         }"
     }
 }
