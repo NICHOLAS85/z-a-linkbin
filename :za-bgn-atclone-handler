@@ -24,4 +24,27 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
     }
 }
 
+if [[ -n "${ZPLG_ICE[node]}" ]] {
+    local -a nodes srcdst
+    nodes=( "${(s.;.)ZPLG_ICE[node]}" )
+
+    local node
+    integer perform_update=0
+
+    for node ( $nodes ) {
+        srcdst=( ${(@s.->.)node} )
+        srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
+        srcdst[1]=${srcdst[1]#\!}
+
+        if [[ "$hook" = *atclone ]]; then
+            ( builtin cd -q "$dir" && command npm install "${srcdst[1]}" )
+        elif [[ "$hook" = *atpull ]]; then
+            perform_update=1
+            break
+        fi
+    }
+
+    (( perform_update )) && ( builtin cd -q "$dir" && command npm update )
+}
+
 # vim:ft=zsh:sw=4:sts=4:et
