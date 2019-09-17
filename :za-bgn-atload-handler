@@ -149,9 +149,9 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         (( ${fsrcs[(I)$fbin]} )) && use_src=1
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = [^[:blank:]]#g[^[:blank:]]#:* ]] && set_gem_home=1
-        [[ ${srcdst[1]} = [^[:blank:]]#n[^[:blank:]]#:* ]] && set_node_path=1
-        [[ ${srcdst[1]} = [^[:blank:]]#c[^[:blank:]]#:* ]] && set_cwd=1
+        [[ ${srcdst[1]} = [gnc]#g[gnc]#:* ]] && set_gem_home=1
+        [[ ${srcdst[1]} = [gnc]#n[gnc]#:* ]] && set_node_path=1
+        [[ ${srcdst[1]} = [gnc]#c[gnc]#:* ]] && set_cwd=1
         srcdst[1]=${srcdst[1]#[a-z]#:}
         
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
@@ -178,9 +178,9 @@ if [[ -n "${ZPLG_ICE[fmod]}" ]] {
     for fmod ( $fmods ) {
         srcdst=( ${(@s.->.)fmod} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = [^[:blank:]]#g[^[:blank:]]#:* ]] && set_gem_home=1
-        [[ ${srcdst[1]} = [^[:blank:]]#n[^[:blank:]]#:* ]] && set_node_path=1
-        [[ ${srcdst[1]} = [^[:blank:]]#c[^[:blank:]]#:* ]] && set_cwd=1
+        [[ ${srcdst[1]} = [gnc]#g[gnc]#:* ]] && set_gem_home=1
+        [[ ${srcdst[1]} = [gnc]#n[gnc]#:* ]] && set_node_path=1
+        [[ ${srcdst[1]} = [gnc]#c[gnc]#:* ]] && set_cwd=1
         srcdst[1]=${srcdst[1]#[a-z]#:}
         
         local target_function="${srcdst[1]}"
