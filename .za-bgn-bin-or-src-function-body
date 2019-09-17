@@ -1,4 +1,4 @@
-# FUNCTION: .za-bgn-bin-or-src-function-body {{{
+# FUNCTION: .za-bgn-bin-or-src-function-body
 # Returns the body of the function wrapping a binary
 local name="$2" bin="$3" dir="$4"
 integer use_src="$1" set_gem_home="$5" set_node_path="$6" set_cwd="$7"
@@ -18,6 +18,5 @@ REPLY="function ${(q)name} {
 REPLY+="
     ${${(M)set_cwd:#1}:+() { setopt localoptions noautopushd; builtin cd -q \"\$oldpwd\"; }}
 }"
-# }}}
 
 # vim:ft=zsh:sw=4:sts=4:et
