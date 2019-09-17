@@ -4,7 +4,8 @@
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
-autoload :za-bgn-atload-handler :za-bgn-atclone-handler \
+autoload .za-bgn-bin-or-src-function-body \
+    :za-bgn-atload-handler :za-bgn-atclone-handler \
     :za-bgn-atpull-handler :za-bgn-help-handler \
     :za-bgn-atdelete-handler
 
@@ -15,7 +16,7 @@ autoload :za-bgn-atload-handler :za-bgn-atclone-handler \
     hook:atload \
     :za-bgn-atload-handler \
     :za-bgn-help-handler \
-    "fbin''|sbin''|gem''|node''|fmod''" # also register new ices
+    "fbin''|sbin''|gem''|node''|fmod''|fsrc''" # also register new ices
 
 @zplg-register-annex "z-a-bin-gem-node" \
     hook:atclone \

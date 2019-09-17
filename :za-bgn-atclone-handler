@@ -91,7 +91,8 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
             fnam="${srcdst[2]:-${srcdst[1]:t}}"
         local file="$ZPFX/bin/$fnam"
 
-        .za-bgn-function-body "$fnam" \
+        .za-bgn-bin-or-src-function-body 0 \
+                    "$fnam" \
                     "$target_binary" "$dir" "$set_gem_home" \
                     "$set_node_path"
 

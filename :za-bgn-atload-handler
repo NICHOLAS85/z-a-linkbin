@@ -45,23 +45,6 @@ local nl=$'\n'
     return 0
 } # }}}
 
-# FUNCTION: .za-bgn-bin-function-body {{{
-# Returns the body of the function wrapping a binary
-.za-bgn-bin-function-body() {
-    local name="$1" bin="$2" dir="$3"
-    integer set_gem_home="$4" set_node_path="$5" set_cwd="$6"
-
-    REPLY="function $name {
-    local bindir=${(qqq)bin:h}
-    ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
-    ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
-    ${${(M)set_cwd:#1}:+pushd -q ${(qqq)dir}}
-    \"\$bindir\"/${(qqq)bin:t} \"\$@\"
-    ${${(M)set_cwd:#1}:+popd -q}
-}"
-}
-# }}}
-
 # FUNCTION: .za-bgn-mod-function-body {{{
 # Returns the body of the function wrapping a function
 .za-bgn-mod-function-body() {
@@ -149,13 +132,17 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 #
 
 if [[ -n "${ZPLG_ICE[fbin]}" ]] {
-    local -a fbins srcdst
-    fbins=( "${(s.;.)ZPLG_ICE[fbin]}" )
+    local -a fbins fsrcs srcdst
+    fbins=( "${(s.;.)ZPLG_ICE[fbin]}"
+        "${(s.;.)ZPLG_ICE[fsrc]}"
+    )
+    fsrcs=( "${(s.;.)ZPLG_ICE[fsrc]}" )
 
     local fbin
-    integer set_gem_home set_node_path set_cwd
+    integer use_src set_gem_home set_node_path set_cwd
 
-    for fbin ( $fbins ) {
+    for fbin ( $fbins $fsrcs ) {
+        (( ${fsrcs[(I)$fbin]} )) && use_src=1
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         [[ ${srcdst[1]} = [^[:blank:]]#g[^[:blank:]]#:* ]] && set_gem_home=1
@@ -165,7 +152,8 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
 
-        .za-bgn-bin-function-body "${srcdst[2]:-${srcdst[1]:t}}" \
+        .za-bgn-bin-or-src-function-body "$use_src" \
+                       "${srcdst[2]:-${srcdst[1]:t}}" \
                        "$target_binary" "$dir" "$set_gem_home" \
                        "$set_node_path" "$set_cwd"
         eval "$REPLY"
