@@ -81,13 +81,15 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
     sbins=( "${(s.;.)ZPLG_ICE[sbin]}" )
 
     local sbin
-    integer set_gem_home set_node_path
 
     for sbin ( $sbins ) {
+        integer set_gem_home=0 set_node_path=0 set_cwd=0
+
         srcdst=( ${(@s.->.)sbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         [[ ${srcdst[1]} = [gnc]#g[gnc]#:* ]] && set_gem_home=1
         [[ ${srcdst[1]} = [gnc]#n[gnc]#:* ]] && set_node_path=1
+        [[ ${srcdst[1]} = [gnc]#c[gnc]#:* ]] && set_cwd=1
         srcdst[1]=${srcdst[1]#[a-z]#:}
 
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
