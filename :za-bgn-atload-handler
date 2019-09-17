@@ -173,9 +173,10 @@ if [[ -n "${ZPLG_ICE[fmod]}" ]] {
     fmods=( "${(s.;.)ZPLG_ICE[fmod]}" )
 
     local fmod
-    integer set_gem_home set_node_path set_cwd
 
     for fmod ( $fmods ) {
+        integer set_gem_home=0 set_node_path=0 set_cwd=0
+
         srcdst=( ${(@s.->.)fmod} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         [[ ${srcdst[1]} = [gnc]#g[gnc]#:* ]] && set_gem_home=1
