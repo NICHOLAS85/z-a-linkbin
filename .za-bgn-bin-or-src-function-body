@@ -12,13 +12,13 @@ REPLY="function ${(q)name} {
     local bindir=${(qqq)bin:h}
     ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
     ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
-    ${${(M)set_cwd:#1}:+local oldpwd=${(qqq)PWD};
-    () { setopt localoptions noautopushd; builtin cd -q ${(qqq)dir}; }}
+    ${${(M)set_cwd:#1}:+"local oldpwd=${(qqq)PWD}
+    () { setopt localoptions noautopushd; builtin cd -q ${(qqq)dir}; }"}
 "
 (( use_src )) && \
     REPLY+="$tab() { source \"\$bindir\"/${(qqq)bin:t}; } \"\$@\"" || \
     REPLY+="$tab\"\$bindir\"/${(qqq)bin:t} \"\$@\""
-REPLY+="${${(M)set_cwd:#1}:+$nl$tab() { setopt localoptions noautopushd; builtin cd -q \"\$oldpwd\"; }}
+REPLY+="${${(M)set_cwd:#1}:+"$nl$tab() { setopt localoptions noautopushd; builtin cd -q \"\$oldpwd\"; }"}
 }"
 
 # vim:ft=zsh:sw=4:sts=4:et
