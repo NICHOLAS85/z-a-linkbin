@@ -1,3 +1,6 @@
+# Copyright (c) 2019 Sebastian Gniazdowski
+# License MIT
+
 # FUNCTION: .za-bgn-bin-or-src-function-body
 # Returns the body of the function wrapping a binary
 local name="$2" bin="$3" dir="$4"
