@@ -99,7 +99,7 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
         .za-bgn-bin-or-src-function-body 0 \
                     "$fnam" \
                     "$target_binary" "$dir" "$set_gem_home" \
-                    "$set_node_path"
+                    "$set_node_path" "$set_cwd"
 
         builtin print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
             >! "$file"
