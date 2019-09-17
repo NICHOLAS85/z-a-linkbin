@@ -19,7 +19,7 @@ autoload .za-bgn-bin-or-src-function-body \
     hook:atload \
     :za-bgn-atload-handler \
     :za-bgn-help-handler \
-    "fbin''|sbin''|gem''|node''|fmod''|fsrc''" # also register new ices
+    "fbin''|sbin''|gem''|node''|fmod''|fsrc''|ferc''" # also register new ices
 
 @zplg-register-annex "z-a-bin-gem-node" \
     hook:atclone \
