@@ -143,9 +143,9 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
     fsrcs=( "${(s.;.)ZPLG_ICE[fsrc]}" )
 
     local fbin
-    integer use_src set_gem_home set_node_path set_cwd
 
     for fbin ( $fbins $fsrcs ) {
+        integer use_src=0 set_gem_home=0 set_node_path=0 set_cwd=0
         (( ${fsrcs[(I)$fbin]} )) && use_src=1
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
