@@ -135,7 +135,7 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 # or node modules
 #
 
-if [[ -n "${ZPLG_ICE[fbin]}" ]] {
+if [[ -n "${ZPLG_ICE[fbin]}${ZPLG_ICE[fsrc]}${ZPLG_ICE[ferc]}" ]] {
     local -a fbins fsrcs fercs srcdst
     fbins=( "${(s.;.)ZPLG_ICE[fbin]}" )
     fsrcs=( "${(s.;.)ZPLG_ICE[fsrc]}" )
