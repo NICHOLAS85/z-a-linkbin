@@ -24,9 +24,8 @@ allows to:
 
 ## How it works – bird's-eye view
 
-Below is a diagram explaining how the major feature – exposing a binary
-program or script through a Zsh function of the same name – is being
-implemented:
+Below is a diagram explaining the major feature – exposing a binary program
+or script through a Zsh function of the same name:
 
 ![diagram](https://raw.githubusercontent.com/zplugin/z-a-bin-gem-node/master/images/diag.png)
 
