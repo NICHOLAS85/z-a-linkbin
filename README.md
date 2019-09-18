@@ -91,7 +91,7 @@ There are 7 ice-modifiers provided and handled by the annex. They are:
   - `gem''` – installs and updates gems + creates functions for gems'
     binaries,
   - `node''` – installs and updates node_modules + creates functions for
-    their binaries,
+    binaries of the modules,
   - `fmod''` – creates wrapping functions for other functions,
   - `fsrc''` – creates functions that source given scripts,
   - `ferc''` – the same as `fsrc''`, but using an alternate script-loading
