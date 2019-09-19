@@ -58,7 +58,7 @@ After this command, the `$PATH` variable will contain e.g.:
 
 ```zsh
 % print $PATH
-/home/sg/.zplugin/plugins/fzf-test:/bin:/usr/bin:/usr/sbin:/sbin
+/home/sg/.zplugin/plugins/junegunn---fzf-bin:/bin:/usr/bin:/usr/sbin:/sbin
 ```
 
 For many such programs loaded as plugins the PATH can become quite cluttered.
