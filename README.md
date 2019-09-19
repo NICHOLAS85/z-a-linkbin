@@ -1,26 +1,26 @@
 # z-a-bin-gem-node
 A Zsh-Zplugin annex (i.e. an extension) that provides functionality, which
 allows to:
-  1. run programs and scripts without adding anything to `$PATH`,
-  2. install and run Ruby [gems](https://github.com/rubygems/rubygems) and
-    [Node](https://github.com/npm/cli) modules from within a local directory
-    with
-    [$GEM_HOME](https://guides.rubygems.org/command-reference/#gem-environment)
-    and
-    [$NODE_PATH](https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders)
-    automatically set,
-  3. run programs, scripts and functions with automatic `cd` into the plugin
-    or snippet directory,
-  4. source scripts through an automatically created function with the above
-    `$GEM_HOME`, `$NODE_PATH` and `cd` features available,
-  5. create the so called `shims` known from
-    [rbenv](https://github.com/rbenv/rbenv) – the same feature as the first
-    item of this enumaration – of running a program without adding anything
-    to `$PATH` with all of the above features, however through an automatic
-    **script** created in `$ZPFX/bin`, not a **function** (the first item
-    uses a function-based mechanism),
-  6. automatic updates of Ruby gems and Node modules during regular plugin and
-    snippet updates with `zplugin update …`.
+  1. Run programs and scripts without adding anything to `$PATH`,
+  2. Install and run Ruby [gems](https://github.com/rubygems/rubygems) and
+     [Node](https://github.com/npm/cli) modules from within a local directory
+     with
+     [$GEM_HOME](https://guides.rubygems.org/command-reference/#gem-environment)
+     and
+     [$NODE_PATH](https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders)
+     automatically set,
+  3. Run programs, scripts and functions with automatic `cd` into the plugin
+     or snippet directory,
+  4. Source scripts through an automatically created function with the above
+     `$GEM_HOME`, `$NODE_PATH` and `cd` features available,
+  5. Create the so called `shims` known from
+     [rbenv](https://github.com/rbenv/rbenv) – the same feature as the first
+     item of this enumaration – of running a program without adding anything
+     to `$PATH` with all of the above features, however through an automatic
+     **script** created in `$ZPFX/bin`, not a **function** (the first item
+     uses a function-based mechanism),
+  6. Automatic updates of Ruby gems and Node modules during regular plugin and
+     snippet updates with `zplugin update …`.
 
 ## How it works – bird's-eye view
 
@@ -86,16 +86,16 @@ an embedded path to it. Thus, no `$PATH` changes are needed!
 ## The Ice Modifiers Provided By The Annex
 
 There are 7 ice-modifiers provided and handled by the annex. They are:
-  - `fbin''` – creates functions for binaries and scripts,
-  - `sbin''` – creates `shims` for binaries and scripts,
-  - `gem''` – installs and updates gems + creates functions for gems'
-    binaries,
-  - `node''` – installs and updates node_modules + creates functions for
-    binaries of the modules,
-  - `fmod''` – creates wrapping functions for other functions,
-  - `fsrc''` – creates functions that source given scripts,
-  - `ferc''` – the same as `fsrc''`, but using an alternate script-loading
-    method.
+  1. `fbin''` – creates functions for binaries and scripts,
+  2. `sbin''` – creates `shims` for binaries and scripts,
+  3. `gem''` – installs and updates gems + creates functions for gems'
+     binaries,
+  4. `node''` – installs and updates node_modules + creates functions for
+     binaries of the modules,
+  5. `fmod''` – creates wrapping functions for other functions,
+  6. `fsrc''` – creates functions that source given scripts,
+  7. `ferc''` – the same as `fsrc''`, but using an alternate script-loading
+     method.
 
 **The ice-modifiers in detail:**
 
