@@ -1,25 +1,25 @@
 # z-a-bin-gem-node
 A Zsh-Zplugin annex (i.e. an extension) that provides functionality, which
 allows to:
-  - run programs and scripts without adding anything to `$PATH`,
-  - install and run Ruby [gems](https://github.com/rubygems/rubygems) and
+  1. run programs and scripts without adding anything to `$PATH`,
+  2. install and run Ruby [gems](https://github.com/rubygems/rubygems) and
     [Node](https://github.com/npm/cli) modules from within a local directory
     with
     [$GEM_HOME](https://guides.rubygems.org/command-reference/#gem-environment)
     and
     [$NODE_PATH](https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders)
     automatically set,
-  - run programs, scripts and functions with automatic `cd` into the plugin
+  3. run programs, scripts and functions with automatic `cd` into the plugin
     or snippet directory,
-  - source scripts through an automatically created function with the above
+  4. source scripts through an automatically created function with the above
     `$GEM_HOME`, `$NODE_PATH` and `cd` features available,
-  - create the so called `shims` known from
+  5. create the so called `shims` known from
     [rbenv](https://github.com/rbenv/rbenv) – the same feature as the first
     item of this enumaration – of running a program without adding anything
     to `$PATH` with all of the above features, however through an automatic
     **script** created in `$ZPFX/bin`, not a **function** (the first item
     uses a function-based mechanism),
-  - automatic updates of Ruby gems and Node modules during regular plugin and
+  6. automatic updates of Ruby gems and Node modules during regular plugin and
     snippet updates with `zplugin update …`.
 
 ## How it works – bird's-eye view
