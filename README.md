@@ -291,6 +291,6 @@ Simply load like a regular plugin, i.e.:
 zplugin light zplugin/z-a-bin-gem-node
 ```
 
-After executing this command you can then use the dl'' and patch'' ice-mods.
+After executing this command you can then use the ice-mods.
 
 <!-- vim:set ft=markdown fo+=an1 autoindent tw=77: -->
