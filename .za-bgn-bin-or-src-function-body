@@ -1,12 +1,13 @@
 # Copyright (c) 2019 Sebastian Gniazdowski
 # License MIT
-
-
+#
 # FUNCTION: .za-bgn-bin-or-src-function-body
 # Returns the body of the function wrapping a binary
+
 local name="$2" bin="$3" dir="$4"
 integer run_type="$1" set_gem_home="$5" \
-    set_node_path="$6" set_cwd="$7"
+    set_node_path="$6" set_cwd="$7" \
+    use_all_null="$8" use_err_null="$9" use_out_null="$10"
 
 local nl=$'\n' tab=$'    '
 
@@ -19,13 +20,18 @@ REPLY="function ${(q)name} {
 "
 
 if (( run_type == 0 )); then
-    REPLY+="$tab\"\$bindir\"/${(qqq)bin:t} \"\$@\"$nl"
+    REPLY+="$tab\"\$bindir\"/${(qqq)bin:t} \"\$@\""
 elif (( run_type == 1 )); then
-    REPLY+="$tab() { source \"\$bindir\"/${(qqq)bin:t}; } \"\$@\"$nl"
+    REPLY+="$tab() { source \"\$bindir\"/${(qqq)bin:t}; } \"\$@\""
 elif (( run_type == 2 )); then
-    REPLY+="$tab() { eval \"\$(<\"\$bindir\"/${(qqq)bin:t})\"; } \"\$@\"$nl"
+    REPLY+="$tab() { eval \"\$(<\"\$bindir\"/${(qqq)bin:t})\"; } \"\$@\""
 fi
 
+(( use_all_null )) && REPLY+=" &>/dev/null"
+(( use_err_null )) && REPLY+=" 2>/dev/null"
+(( use_out_null )) && REPLY+=" >/dev/null"
+
+REPLY+="$nl"
 REPLY+="${${(M)set_cwd:#1}:+"$nl$tab() { setopt localoptions noautopushd; builtin cd -q \"\$oldpwd\"; }"}
 }"
 

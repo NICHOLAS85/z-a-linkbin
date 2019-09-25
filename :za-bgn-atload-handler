@@ -123,23 +123,28 @@ if [[ -n "${ZPLG_ICE[fbin]}${ZPLG_ICE[fsrc]}${ZPLG_ICE[ferc]}" ]] {
     integer run_type=0
 
     for fbin ( $fbins "<sep1>" $fsrcs "<sep2>" $fercs ) {
-        integer set_gem_home=0 set_node_path=0 set_cwd=0
+        integer set_gem_home=0 set_node_path=0 set_cwd=0 \
+                use_all_null=0 use_err_null=0 use_out_null=0
 
         [[ "$fbin" = "<sep1>" ]] && { run_type=1; continue; }
         [[ "$fbin" = "<sep2>" ]] && { run_type=2; continue; }
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = [gnc]#g[gnc]#:* ]] && set_gem_home=1
-        [[ ${srcdst[1]} = [gnc]#n[gnc]#:* ]] && set_node_path=1
-        [[ ${srcdst[1]} = [gnc]#c[gnc]#:* ]] && set_cwd=1
-        srcdst[1]=${srcdst[1]#[a-z]#:}
+        [[ ${srcdst[1]} = [gncNEO]#g[gncNEO]#:* ]] && set_gem_home=1
+        [[ ${srcdst[1]} = [gncNEO]#n[gncNEO]#:* ]] && set_node_path=1
+        [[ ${srcdst[1]} = [gncNEO]#c[gncNEO]#:* ]] && set_cwd=1
+        [[ ${srcdst[1]} = [gncNEO]#N[gncNEO]#:* ]] && use_all_null=1
+        [[ ${srcdst[1]} = [gncNEO]#E[gncNEO]#:* ]] && use_err_null=1
+        [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
+        srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
         
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
 
         .za-bgn-bin-or-src-function-body "$run_type" \
                        "${srcdst[2]:-${srcdst[1]:t}}" \
                        "$target_binary" "$dir" "$set_gem_home" \
-                       "$set_node_path" "$set_cwd"
+                       "$set_node_path" "$set_cwd" "$use_all_null" \
+                       "$use_err_null" "$use_out_null"
         eval "$REPLY"
     }
 }
