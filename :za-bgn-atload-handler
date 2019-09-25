@@ -160,20 +160,25 @@ if [[ -n "${ZPLG_ICE[fmod]}" ]] {
     local fmod
 
     for fmod ( $fmods ) {
-        integer set_gem_home=0 set_node_path=0 set_cwd=0
+        integer set_gem_home=0 set_node_path=0 set_cwd=0 \
+                use_all_null=0 use_err_null=0 use_out_null=0
 
         srcdst=( ${(@s.->.)fmod} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = [gnc]#g[gnc]#:* ]] && set_gem_home=1
-        [[ ${srcdst[1]} = [gnc]#n[gnc]#:* ]] && set_node_path=1
-        [[ ${srcdst[1]} = [gnc]#c[gnc]#:* ]] && set_cwd=1
-        srcdst[1]=${srcdst[1]#[a-z]#:}
+        [[ ${srcdst[1]} = [gncNEO]#g[gncNEO]#:* ]] && set_gem_home=1
+        [[ ${srcdst[1]} = [gncNEO]#n[gncNEO]#:* ]] && set_node_path=1
+        [[ ${srcdst[1]} = [gncNEO]#c[gncNEO]#:* ]] && set_cwd=1
+        [[ ${srcdst[1]} = [gncNEO]#N[gncNEO]#:* ]] && use_all_null=1
+        [[ ${srcdst[1]} = [gncNEO]#E[gncNEO]#:* ]] && use_err_null=1
+        [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
+        srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
         
         local target_function="${srcdst[1]}"
 
         .za-bgn-mod-function-body "${srcdst[2]:-${srcdst[1]}}" \
                        "$target_function" "$dir" "$set_gem_home" \
-                       "$set_node_path" "$set_cwd"
+                       "$set_node_path" "$set_cwd" "$use_all_null" \
+                       "$use_err_null" "$use_out_null"
         eval "$REPLY"
     }
 }
