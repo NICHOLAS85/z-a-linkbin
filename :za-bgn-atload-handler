@@ -48,28 +48,6 @@ local nl=$'\n'
     return 0
 } # }}}
 
-# FUNCTION: .za-bgn-mod-function-body {{{
-# Returns the body of the function wrapping a function
-.za-bgn-mod-function-body() {
-    local name="$1" target_func="$2" dir="$3"
-    integer set_gem_home="$4" set_node_path="$5" set_cwd="$6"
-
-    if [[ "$name" = "$target_func" ]]; then
-        target_func="${target_func}--za-bgn-orig"
-        functions[$target_func]="${functions[$name]}"
-    fi
-
-    REPLY="function $name {
-    ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
-    ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
-    ${${(M)set_cwd:#1}:+"local oldpwd=${(qqq)PWD}
-    () { setopt localoptions noautopushd; builtin cd -q ${(qqq)dir}; }"}
-    ${(qqq)target_func} \"\$@\"
-    ${${(M)set_cwd:#1}:+"() { setopt localoptions noautopushd; builtin cd -q \"\$oldpwd\"; }"}
-}"
-}
-# }}}
-
 #
 # gem'' ice
 #
