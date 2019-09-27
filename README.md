@@ -103,16 +103,15 @@ There are 7 ice-modifiers provided and handled by the annex. They are:
 
 ---
 
-## 1. **`fbin"[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-function}];
-…"`**
+## 1. **`fbin"[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-function}]; …"`**
 
 Creates a wrapper function of the name the same as the last segment of the
 path or as `{name-of-the-function}`. The optional preceding flags mean:
   
-  - `g` – set `$GEM_HOME` variable,
-  - `n` – set `$NODE_PATH` variable,
-  - `c` – cd to the plugin's directory before running the function and then
-    cd back after it has been run,
+  - `g` – set `$GEM_HOME` variable to `{plugin-dir}`,
+  - `n` – set `$NODE_PATH` variable to `{plugin-dir}/node_modules`,
+  - `c` – cd to the plugin's directory before running the program and then cd
+    back after it has been run,
   - `N` – append `&>/dev/null` to the call of the binary, i.e. redirect both
     standard output and standard error to `/dev/null`,
   - `E` – append `2>/dev/null` to the call of the binary, i.e. redirect
