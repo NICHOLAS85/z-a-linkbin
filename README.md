@@ -109,8 +109,8 @@ There are 7 ice-modifiers provided and handled by the annex. They are:
 Creates a wrapper function of the name the same as the last segment of the
 path or as `{name-of-the-function}`. The optional preceding flags mean:
   
-  - `g` – set `$GEM_HOME` variable to `{plugin-dir}`,
-  - `n` – set `$NODE_PATH` variable to `{plugin-dir}/node_modules`,
+  - `g` – set `$GEM_HOME` variable,
+  - `n` – set `$NODE_PATH` variable,
   - `c` – cd to the plugin's directory before running the function and then
     cd back after it has been run,
   - `N` – append `&>/dev/null` to the call of the binary, i.e. redirect both
@@ -136,8 +136,7 @@ myfzf () {
 ---
 
 ## 2. **`gem"{gem-name}; …"`**
-## &nbsp;&nbsp;&nbsp; **`gem"[{path-to-binary} <-] !{gem-name} [->
-{name-of-the-function}]; …"`**
+## &nbsp;&nbsp;&nbsp; **`gem"[{path-to-binary} <-] !{gem-name} [-> {name-of-the-function}]; …"`**
 
 Installs the gem of name `{gem-name}` with `$GEM_HOME` set to the plugin's or
 snippet's directory. In other words, the gem and its dependencies will be
@@ -162,8 +161,7 @@ asciidoctor () {
 ---
 
 ## 3. **`node"{node-module}; …"`**
-## &nbsp;&nbsp;&nbsp; **`node"[{path-to-binary} <-] !{node-module} [->
-{name-of-the-function}]; …"`**
+## &nbsp;&nbsp;&nbsp; **`node"[{path-to-binary} <-] !{node-module} [-> {name-of-the-function}]; …"`**
 
 Installs the node module of name `{node-module}` inside the plugin's or
 snippet's directory.
@@ -197,8 +195,7 @@ has been used.
 ---
 
 ## 4. **`fmod"[{g|n|c|N|E|O}:]{function-name}; …"`**
-## &nbsp;&nbsp;&nbsp; **`fmod"[{g|n|c|N|E|O}:]{function-name} ->
-{wrapping-function-name}; …"`**
+## &nbsp;&nbsp;&nbsp; **`fmod"[{g|n|c|N|E|O}:]{function-name} -> {wrapping-function-name}; …"`**
 
 It wraps given function with the ability to set `$GEM_HOME`, etc. – the
 meaning of the `g`,`n` and `c` flags is the same as in the `fbin''` ice.
@@ -232,8 +229,7 @@ README.md
 
 ---
 
-## 5. **`sbin"[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}];
-…"`**
+## 5. **`sbin"[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …"`**
 
 It creates the so called `shim` known from `rbenv` – a wrapper script that
 forwards the call to the actual binary. The script is created always under
@@ -266,10 +262,8 @@ fzf "$@"
 
 ---
 
-## 6. **`fsrc"[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}];
-…"`**
-## 7. **`ferc"[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}];
-…"`**
+## 6. **`fsrc"[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …"`**
+## 7. **`ferc"[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …"`**
 
 Creates a wrapper function that at each invocation sources the given file.
 The second ice, `ferc''` works the same with the single difference that it
