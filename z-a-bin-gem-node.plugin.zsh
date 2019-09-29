@@ -17,7 +17,7 @@ autoload .za-bgn-bin-or-src-function-body \
 :za-bgn-help-null-handler() { :; }
 
 @zplg-register-annex "z-a-bin-gem-node" \
-    hook:atload \
+    hook:\!atload \
     :za-bgn-atload-handler \
     :za-bgn-help-handler \
     "fbin''|sbin''|gem''|node''|fmod''|fsrc''|ferc''" # also register new ices
