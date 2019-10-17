@@ -33,9 +33,12 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
         local file="$ZPFX/bin/$fnam"
 
         if [[ -f $file ]]; then
-            command rm -f "$file" && \
+            command rm -f "$file"
+            if [[ -f $file ]]; then
+                print -P -- "%F{38}bin-gem-node annex: %F{160}Couldn't remove the %F{220}$fnam%F{160} shim from \$ZPFX/bin (no write access to \$ZPFX/bin?)%f"
+            else
                 print -P -- "%F{38}bin-gem-node annex: %F{154}Correctly removed the %F{220}$fnam%F{154} shim from \$ZPFX/bin%f" || \
-                print -P -- "%F{38}bin-gem-node annex: %F{160}Could remove the %F{220}$fnam%F{160} shim from \$ZPFX/bin (no write access to \$ZPFX/bin?)%f"
+            fi
         else
             print -P -- "%F{38}bin-gem-node annex: %F{160}The %F{220}$fnam%F{160} shim didn't exist in \$ZPFX/bin (or isn't a regular file)%f"
         fi
