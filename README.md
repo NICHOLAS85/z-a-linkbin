@@ -298,6 +298,10 @@ Simply load like a regular plugin, i.e.:
 zplugin light zplugin/z-a-bin-gem-node
 ```
 
+# Example
+
+![diagram](https://raw.githubusercontent.com/zplugin/z-a-rust/master/images/z-a-rust.png)
+
 After executing this command you can then use the ice-mods.
 
 <!-- vim:set ft=markdown fo+=an1 autoindent tw=77: -->
