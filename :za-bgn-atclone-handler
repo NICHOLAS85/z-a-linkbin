@@ -108,7 +108,7 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
 
         builtin print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
             >! "$file"
-        command chmod +x "$file"
+        command chmod +x "$file" "$target_binary"
 
         if [[ -x $file ]]; then
             print -P -- "%F{38}bin-gem-node annex: %F{154}Created the %F{220}$fnam%F{154} shim%f"
