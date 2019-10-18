@@ -32,9 +32,9 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
 
     (( ${#gems} )) && {
         if [[ "$hook" = *atclone ]]; then
-            command gem install -q -i "$dir" "${gems[@]}"
+            command gem install -q --no-user-install -i "$dir" "${gems[@]}"
         elif [[ "$hook" = *atpull ]]; then
-            command gem update -q -i "$dir" "${gems[@]}"
+            command gem update -q --no-user-install -i "$dir" "${gems[@]}"
         fi
     }
 }
