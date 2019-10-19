@@ -34,6 +34,7 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         if [[ "$hook" = *atclone ]]; then
             command gem install -q --no-user-install -i "$dir" "${gems[@]}"
         elif [[ "$hook" = *atpull ]]; then
+            print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the gems...%f"
             command gem update -q --no-user-install -i "$dir" "${gems[@]}"
         fi
     }
@@ -69,7 +70,7 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         ( builtin cd -q "$dir" && command npm --silent install "${mods[@]}" )
 
     (( perform_update )) && \
-        ( builtin cd -q "$dir" && command npm --silent update )
+        ( builtin cd -q "$dir" && { print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the node modules...%f";  command npm --silent update } )
 }
 
 #
