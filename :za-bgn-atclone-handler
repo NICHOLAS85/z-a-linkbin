@@ -115,7 +115,7 @@ if [[ -n "${ZPLG_ICE[sbin]}" ]] {
             if [[ -x $target_binary ]]; then
                 print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim and properly set +x on the %F{219}${target_binary:t}%F{154} binary%f"
             else
-                print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim %F{160} however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
+                print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
             fi
         else
             print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong creating the %F{219}$fnam%F{160} shim%f"
