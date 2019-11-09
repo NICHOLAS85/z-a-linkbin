@@ -113,21 +113,44 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 # or node modules
 #
 
-if [[ -n "${ZPLG_ICE[fbin]}${ZPLG_ICE[fsrc]}${ZPLG_ICE[ferc]}" ]] {
+if (( ${+ZPLG_ICE[fbin]}${+ZPLG_ICE[fsrc]}${+ZPLG_ICE[ferc]} > 0 )) {
     local -a fbins fsrcs fercs srcdst
-    fbins=( "${(s.;.)ZPLG_ICE[fbin]}" )
-    fsrcs=( "${(s.;.)ZPLG_ICE[fsrc]}" )
-    fercs=( "${(s.;.)ZPLG_ICE[ferc]}" )
+    fbins=( ${(s.;.)ZPLG_ICE[fbin]} )
+    fsrcs=( ${(s.;.)ZPLG_ICE[fsrc]} )
+    fercs=( ${(s.;.)ZPLG_ICE[ferc]} )
 
     local fbin
     integer run_type=0
 
-    for fbin ( $fbins "<sep1>" $fsrcs "<sep2>" $fercs ) {
+    for fbin ( $fbins "" "<sep1>" $fsrcs "" "<sep2>" $fercs "" ) {
         integer set_gem_home=0 set_node_path=0 set_cwd=0 \
                 use_all_null=0 use_err_null=0 use_out_null=0
 
         [[ "$fbin" = "<sep1>" ]] && { run_type=1; continue; }
         [[ "$fbin" = "<sep2>" ]] && { run_type=2; continue; }
+
+        if [[ ( ${+ZPLG_ICE[fbin]} -eq 1 && run_type -eq 0 && -z $fbin && ${#fbins} -eq 0 ) || \
+            ( ${+ZPLG_ICE[fsrc]} -eq 1 && run_type -eq 1 && -z $fbin && ${#fsrcs} -eq 0 ) || \
+            ( ${+ZPLG_ICE[ferc]} -eq 1 && run_type -eq 2 && -z $fbin && ${#fercs} -eq 0 )
+        ]]; then
+            if [[ -f $dir/${id_as:t} ]]; then
+                fbin="$dir/${id_as:t}"
+            elif [[ -n $plugin && -f $dir/$plugin ]]; then
+                fbin="$dir/$plugin"
+            elif [[ -n $url && -f $dir/${url:t} ]]; then
+                fbin="$dir/${url:t}"
+            else
+                local -a files
+                files=( $dir/*(*Non:t) )
+                if (( ${#files} )); then
+                    fbin="${files[1]}"
+                else
+                    print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty fbin ice didn't find any executable files for %F{219}$id_as%f"
+                    break
+                fi
+            fi
+        fi
+
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         [[ ${srcdst[1]} = [gncNEO]#g[gncNEO]#:* ]] && set_gem_home=1
