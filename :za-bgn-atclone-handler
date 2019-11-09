@@ -77,15 +77,34 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 # sbin'' ice – creation of shims (the name borrowed from rbenv)
 #
 
-if [[ -n "${ZPLG_ICE[sbin]}" ]] {
+if (( ${+ZPLG_ICE[sbin]} )) {
     local -a sbins srcdst
-    sbins=( "${(s.;.)ZPLG_ICE[sbin]}" )
+    sbins=( ${(s.;.)ZPLG_ICE[sbin]} )
 
     local sbin
 
-    for sbin ( $sbins ) {
+    for sbin ( $sbins "" ) {
         integer set_gem_home=0 set_node_path=0 set_cwd=0 \
                 use_all_null=0 use_err_null=0 use_out_null=0
+
+        if [[ -z $sbin && ${#sbins} -eq 0 ]]; then
+            if [[ -f $dir/${id_as:t} ]]; then
+                sbin="$dir/${id_as:t}"
+            elif [[ -n $plugin && -f $dir/$plugin ]]; then
+                sbin="$dir/$plugin"
+            elif [[ -n $url && -f $dir/${url:t} ]]; then
+                sbin="$dir/${url:t}"
+            else
+                local -a files
+                files=( $dir/*(*Non:t) )
+                if (( ${#files} )); then
+                    sbin="${files[1]}"
+                else
+                    print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty sbin ice didn't find any executable files%f"
+                    break
+                fi
+            fi
+        fi
 
         srcdst=( ${(@s.->.)sbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
