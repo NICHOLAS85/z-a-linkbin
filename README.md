@@ -132,6 +132,15 @@ myfzf () {
 }
 ```
 
+**The ice can be empty**. It will then try to create the function for:
+
+- trailing component of the `id_as` ice, e.g.: `id_as'exts/git-my'` → it'll
+  check if a file `git-my` exists and if yes, create the function `git-my`,
+- the plugin name, e.g.: for `paulirish/git-open` it'll check if a file
+  `git-open` exists and if yes, create the function `git-open`,
+- trailing component of the snippet URL,
+- for any alphabetically first executable file.
+
 ---
 
 ## 2. **`gem"{gem-name}; …"`**
@@ -259,6 +268,15 @@ function fzf {
 fzf "$@"
 ```
 
+**The ice can be empty**. It will then try to create the shim for:
+
+- trailing component of the `id_as` ice, e.g.: `id_as'exts/git-my'` → it'll
+  check if a file `git-my` exists and if yes, create the shim `git-my`,
+- the plugin name, e.g.: for `paulirish/git-open` it'll check if a file
+  `git-open` exists and if yes, create the shim `git-open`,
+- trailing component of the snippet URL,
+- for any alphabetically first executable file.
+
 ---
 
 ## 6. **`fsrc"[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …"`**
@@ -289,6 +307,10 @@ myscript () {
         } "$@"
 }
 ```
+
+**The ices can be empty**. They will then try to create the function for
+trailing component of the `id-as` ice and the other cases, in the same way as
+with the `fbin` ice.
 
 ## Installation
 
