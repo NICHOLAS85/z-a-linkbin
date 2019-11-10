@@ -149,6 +149,8 @@ if (( ${+ZPLG_ICE[fbin]}${+ZPLG_ICE[fsrc]}${+ZPLG_ICE[ferc]} > 0 )) {
                     break
                 fi
             fi
+        elif [[ -z $fbin ]]; then
+            continue
         fi
 
         srcdst=( ${(@s.->.)fbin} )

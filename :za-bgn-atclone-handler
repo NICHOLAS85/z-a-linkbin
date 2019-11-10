@@ -104,6 +104,8 @@ if (( ${+ZPLG_ICE[sbin]} )) {
                     break
                 fi
             fi
+        elif [[ -z $sbin ]]; then
+            continue
         fi
 
         srcdst=( ${(@s.->.)sbin} )
