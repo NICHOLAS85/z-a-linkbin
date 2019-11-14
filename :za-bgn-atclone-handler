@@ -83,65 +83,71 @@ if (( ${+ZPLG_ICE[sbin]} )) {
 
     local sbin
 
-    for sbin ( $sbins "" ) {
-        integer set_gem_home=0 set_node_path=0 set_cwd=0 \
-                use_all_null=0 use_err_null=0 use_out_null=0
+    (
+        # CD for the globbing through eval
+        builtin cd -q "$dir" || return
 
-        if [[ -z $sbin && ${#sbins} -eq 0 ]]; then
-            if [[ -f $dir/${id_as:t} ]]; then
-                sbin="$dir/${id_as:t}"
-            elif [[ -n $plugin && -f $dir/$plugin ]]; then
-                sbin="$dir/$plugin"
-            elif [[ -n $url && -f $dir/${url:t} ]]; then
-                sbin="$dir/${url:t}"
-            else
-                local -a files
-                files=( $dir/*(*Non:t) )
-                if (( ${#files} )); then
-                    sbin="${files[1]}"
+        for sbin ( $sbins "" ) {
+            integer set_gem_home=0 set_node_path=0 set_cwd=0 \
+                    use_all_null=0 use_err_null=0 use_out_null=0
+
+            if [[ -z $sbin && ${#sbins} -eq 0 ]]; then
+                if [[ -f $dir/${id_as:t} ]]; then
+                    sbin="$dir/${id_as:t}"
+                elif [[ -n $plugin && -f $dir/$plugin ]]; then
+                    sbin="$dir/$plugin"
+                elif [[ -n $url && -f $dir/${url:t} ]]; then
+                    sbin="$dir/${url:t}"
                 else
-                    print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty sbin ice didn't find any executable files%f"
-                    break
+                    local -a files
+                    print yes
+                    files=( $dir/*(*Non:t) )
+                    if (( ${#files} )); then
+                        sbin="${files[1]}"
+                    else
+                        print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty sbin ice didn't find any executable files%f"
+                        break
+                    fi
                 fi
+            elif [[ -z $sbin ]]; then
+                continue
             fi
-        elif [[ -z $sbin ]]; then
-            continue
-        fi
 
-        srcdst=( ${(@s.->.)sbin} )
-        srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = [gncNEO]#g[gncNEO]#:* ]] && set_gem_home=1
-        [[ ${srcdst[1]} = [gncNEO]#n[gncNEO]#:* ]] && set_node_path=1
-        [[ ${srcdst[1]} = [gncNEO]#c[gncNEO]#:* ]] && set_cwd=1
-        [[ ${srcdst[1]} = [gncNEO]#N[gncNEO]#:* ]] && use_all_null=1
-        [[ ${srcdst[1]} = [gncNEO]#E[gncNEO]#:* ]] && use_err_null=1
-        [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
-        srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
+            srcdst=( ${(@s.->.)sbin} )
+            srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
+            [[ ${srcdst[1]} = [gncNEO]#g[gncNEO]#:* ]] && set_gem_home=1
+            [[ ${srcdst[1]} = [gncNEO]#n[gncNEO]#:* ]] && set_node_path=1
+            [[ ${srcdst[1]} = [gncNEO]#c[gncNEO]#:* ]] && set_cwd=1
+            [[ ${srcdst[1]} = [gncNEO]#N[gncNEO]#:* ]] && use_all_null=1
+            [[ ${srcdst[1]} = [gncNEO]#E[gncNEO]#:* ]] && use_err_null=1
+            [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
+            srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
 
-        local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
-            fnam="${srcdst[2]:-${srcdst[1]:t}}"
-        local file="$ZPFX/bin/$fnam"
+            local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
+                fnam="${srcdst[2]:-${srcdst[1]:t}}"
+            local file="$ZPFX/bin/$fnam"
 
-        .za-bgn-bin-or-src-function-body 0 \
-                    "$fnam" \
-                    "$target_binary" "$dir" "$set_gem_home" \
-                    "$set_node_path" "$set_cwd" "$use_all_null" \
-                    "$use_err_null" "$use_out_null"
+            .za-bgn-bin-or-src-function-body 0 \
+                        "$fnam" \
+                        "$target_binary" "$dir" "$set_gem_home" \
+                        "$set_node_path" "$set_cwd" "$use_all_null" \
+                        "$use_err_null" "$use_out_null"
 
-        builtin print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
-            >! "$file"
-        command chmod +x "$file" "$target_binary"
+            builtin print -r -- "#!/usr/bin/env zsh$nl$nl$REPLY$nl$nl$fnam \"\$@\"" \
+                >! "$file"
+            command chmod +x "$file" "$target_binary"
 
-        if [[ -x $file ]]; then
-            if [[ -x $target_binary ]]; then
-                print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim and properly set +x on the %F{219}${target_binary:t}%F{154} binary%f"
+            if [[ -x $file ]]; then
+                if [[ -x $target_binary ]]; then
+                    print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim and properly set +x on the %F{219}${target_binary:t}%F{154} binary%f"
+                else
+                    print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
+                fi
             else
-                print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
+                print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong creating the %F{219}$fnam%F{160} shim%f"
             fi
-        else
-            print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong creating the %F{219}$fnam%F{160} shim%f"
-        fi
-    }
+        }
+    )
 }
 
 if [[ -n "${ZPLG_ICE[fbin]}" ]] {
