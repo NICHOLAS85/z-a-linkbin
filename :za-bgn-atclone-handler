@@ -122,6 +122,10 @@ if (( ${+ZPLG_ICE[sbin]} )) {
             [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
             srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
 
+            local -a fnames
+            eval "fnames=( ${sbin}(Nnon) )"
+            srcdst[1]="${fnames[1]}"
+
             local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
                 fnam="${srcdst[2]:-${srcdst[1]:t}}"
             local file="$ZPFX/bin/$fnam"
