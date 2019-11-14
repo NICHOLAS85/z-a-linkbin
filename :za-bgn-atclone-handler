@@ -100,8 +100,7 @@ if (( ${+ZPLG_ICE[sbin]} )) {
                     sbin="$dir/${url:t}"
                 else
                     local -a files
-                    print yes
-                    files=( $dir/*(*Non:t) )
+                    files=( $dir/*(*Nnon:t) )
                     if (( ${#files} )); then
                         sbin="${files[1]}"
                     else
