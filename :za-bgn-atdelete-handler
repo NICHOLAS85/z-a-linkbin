@@ -21,55 +21,59 @@ if (( ${+ZPLG_ICE[sbin]} )) {
     local sbin
     integer set_gem_home set_node_path
 
-    for sbin ( $sbins "" ) {
-        if [[ -z $sbin && ${#sbins} -eq 0 ]]; then
-            if [[ -f $dir/${id_as:t} ]]; then
-                sbin="$dir/${id_as:t}"
-            elif [[ -n $plugin && -f $dir/$plugin ]]; then
-                sbin="$dir/$plugin"
-            elif [[ -n $url && -f $dir/${url:t} ]]; then
-                sbin="$dir/${url:t}"
-            else
-                local -a files
-                files=( $dir/*(*Non:t) )
-                if (( ${#files} )); then
-                    sbin="${files[1]}"
+    ( 
+        builtin cd -q "$dir"
+        for sbin ( $sbins "" ) {
+            if [[ -z $sbin && ${#sbins} -eq 0 ]]; then
+                if [[ -f $dir/${id_as:t} ]]; then
+                    sbin="$dir/${id_as:t}"
+                elif [[ -n $plugin && -f $dir/$plugin ]]; then
+                    sbin="$dir/$plugin"
+                elif [[ -n $url && -f $dir/${url:t} ]]; then
+                    sbin="$dir/${url:t}"
                 else
-                    print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty sbin ice didn't find any executable files%f"
-                    break
+                    local -a files
+                    files=( $dir/*(*Non:t) )
+                    if (( ${#files} )); then
+                        sbin="${files[1]}"
+                    else
+                        print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty sbin ice didn't find any executable files%f"
+                        break
+                    fi
                 fi
+            elif [[ -z $sbin ]]; then
+                continue
             fi
-        elif [[ -z $sbin ]]; then
-            continue
-        fi
 
-        srcdst=( ${(@s.->.)sbin} )
-        srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-        [[ ${srcdst[1]} = (g|ng|gn):* ]] && set_gem_home=1 || set_gem_home=0
-        [[ ${srcdst[1]} = (n|gn|ng):* ]] && set_node_path=1 || set_node_path=0
-        srcdst[1]=${srcdst[1]#(n|g|gn|ng):}
+            srcdst=( ${(@s.->.)sbin} )
+            srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
+            [[ ${srcdst[1]} = (g|ng|gn):* ]] && set_gem_home=1 || set_gem_home=0
+            [[ ${srcdst[1]} = (n|gn|ng):* ]] && set_node_path=1 || set_node_path=0
+            srcdst[1]=${srcdst[1]#(n|g|gn|ng):}
 
-        local -a fnames
-        local fname
-        eval "fnames=( ${srcdst[1]}(Nnon) )"
-        for fname ( $fnames ) {
-            srcdst[1]="$fname"
-            local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
-                fnam="${srcdst[2]:-${srcdst[1]:t}}"
-            local file="$ZPFX/bin/$fnam"
+            local -a fnames
+            local fname
+            eval "fnames=( ${srcdst[1]}(Nnon) )"
+            print -rl NAMES: $fnames
+            for fname ( $fnames ) {
+                srcdst[1]="$fname"
+                local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
+                    fnam="${srcdst[2]:-${srcdst[1]:t}}"
+                local file="$ZPFX/bin/$fnam"
 
-            if [[ -f $file ]]; then
-                command rm -f "$file"
                 if [[ -f $file ]]; then
-                    print -P -- "%F{38}bin-gem-node annex: %F{160}Couldn't remove the %F{220}$fnam%F{160} shim from \$ZPFX/bin (no write access to \$ZPFX/bin?)%f"
+                    command rm -f "$file"
+                    if [[ -f $file ]]; then
+                        print -P -- "%F{38}bin-gem-node annex: %F{160}Couldn't remove the %F{220}$fnam%F{160} shim from \$ZPFX/bin (no write access to \$ZPFX/bin?)%f"
+                    else
+                        print -P -- "%F{38}bin-gem-node annex: %F{154}Correctly removed the %F{220}$fnam%F{154} shim from \$ZPFX/bin%f" || \
+                    fi
                 else
-                    print -P -- "%F{38}bin-gem-node annex: %F{154}Correctly removed the %F{220}$fnam%F{154} shim from \$ZPFX/bin%f" || \
+                    print -P -- "%F{38}bin-gem-node annex: %F{160}The %F{220}$fnam%F{160} shim didn't exist in \$ZPFX/bin (or isn't a regular file)%f"
                 fi
-            else
-                print -P -- "%F{38}bin-gem-node annex: %F{160}The %F{220}$fnam%F{160} shim didn't exist in \$ZPFX/bin (or isn't a regular file)%f"
-            fi
+            }
         }
-    }
+    )
 }
 
 # vim:ft=zsh:sw=4:sts=4:et
