@@ -15,7 +15,7 @@ REPLY="function ${(q)name} {
     local bindir=${(qqq)bin:h}
     ${${(M)set_gem_home:#1}:+local -x GEM_HOME=${(qqq)dir}}
     ${${(M)set_node_path:#1}:+local -x NODE_PATH=${(qqq)dir}/node_modules}
-    local -xU PATH=${${(M)set_node_path:#1}:+${(qqq)dir}/node_modules/.bin:}${${(M)set_gem_home:#1}:+${(qqq)dir}/bin:}${(qqq)bin:h}:\"\$PATH\"
+    local -xU PATH=${${(M)set_node_path:#1}:+${(qqq)dir}/node_modules/.bin:}${${(M)set_gem_home:#1}:+${(qqq)dir}/bin:}\"\$bindir\":\"\$PATH\"
     ${${(M)set_cwd:#1}:+"local oldpwd=${(qqq)PWD}
     () { setopt localoptions noautopushd; builtin cd -q ${(qqq)dir}; }"}
 "
