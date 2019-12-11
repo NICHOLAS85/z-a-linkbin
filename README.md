@@ -1,3 +1,25 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [z-a-bin-gem-node](#z-a-bin-gem-node)
+  - [How it works – bird's-eye view](#how-it-works--birds-eye-view)
+  - [How it works, in detail](#how-it-works-in-detail)
+  - [The Ice Modifiers Provided By The Annex](#the-ice-modifiers-provided-by-the-annex)
+  - [1. **`fbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-function}]; …'`**](#1-fbingncneopath-to-binary---name-of-the-function-)
+  - [2. **`gem'{gem-name}; …'`**](#2-gemgem-name-)
+  - [&nbsp;&nbsp;&nbsp; **`gem'[{path-to-binary} <-] !{gem-name} [-> {name-of-the-function}]; …'`**](#nbspnbspnbsp-gempath-to-binary---gem-name---name-of-the-function-)
+  - [3. **`node'{node-module}; …'`**](#3-nodenode-module-)
+  - [&nbsp;&nbsp;&nbsp; **`node'[{path-to-binary} <-] !{node-module} [-> {name-of-the-function}]; …'`**](#nbspnbspnbsp-nodepath-to-binary---node-module---name-of-the-function-)
+  - [4. **`fmod'[{g|n|c|N|E|O}:]{function-name}; …'`**](#4-fmodgncneofunction-name-)
+  - [&nbsp;&nbsp;&nbsp; **`fmod'[{g|n|c|N|E|O}:]{function-name} -> {wrapping-function-name}; …'`**](#nbspnbspnbsp-fmodgncneofunction-name---wrapping-function-name-)
+  - [5. **`sbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …'`**](#5-sbingncneopath-to-binary---name-of-the-script-)
+  - [6. **`fsrc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#6-fsrcgncneopath-to-script---name-of-the-function-)
+  - [7. **`ferc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#7-fercgncneopath-to-script---name-of-the-function-)
+  - [Installation](#installation)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # z-a-bin-gem-node
 A Zsh-Zplugin annex (i.e. an extension) that provides functionality, which
 allows to:
@@ -103,7 +125,7 @@ There are 7 ice-modifiers provided and handled by the annex. They are:
 
 ---
 
-## 1. **`fbin"[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-function}]; …"`**
+## 1. **`fbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-function}]; …'`**
 
 Creates a wrapper function of the name the same as the last segment of the
 path or as `{name-of-the-function}`. The optional preceding flags mean:
@@ -143,8 +165,8 @@ myfzf () {
 
 ---
 
-## 2. **`gem"{gem-name}; …"`**
-## &nbsp;&nbsp;&nbsp; **`gem"[{path-to-binary} <-] !{gem-name} [-> {name-of-the-function}]; …"`**
+## 2. **`gem'{gem-name}; …'`**
+## &nbsp;&nbsp;&nbsp; **`gem'[{path-to-binary} <-] !{gem-name} [-> {name-of-the-function}]; …'`**
 
 Installs the gem of name `{gem-name}` with `$GEM_HOME` set to the plugin's or
 snippet's directory. In other words, the gem and its dependencies will be
@@ -168,8 +190,8 @@ asciidoctor () {
 
 ---
 
-## 3. **`node"{node-module}; …"`**
-## &nbsp;&nbsp;&nbsp; **`node"[{path-to-binary} <-] !{node-module} [-> {name-of-the-function}]; …"`**
+## 3. **`node'{node-module}; …'`**
+## &nbsp;&nbsp;&nbsp; **`node'[{path-to-binary} <-] !{node-module} [-> {name-of-the-function}]; …'`**
 
 Installs the node module of name `{node-module}` inside the plugin's or
 snippet's directory.
@@ -202,8 +224,8 @@ has been used.
 
 ---
 
-## 4. **`fmod"[{g|n|c|N|E|O}:]{function-name}; …"`**
-## &nbsp;&nbsp;&nbsp; **`fmod"[{g|n|c|N|E|O}:]{function-name} -> {wrapping-function-name}; …"`**
+## 4. **`fmod'[{g|n|c|N|E|O}:]{function-name}; …'`**
+## &nbsp;&nbsp;&nbsp; **`fmod'[{g|n|c|N|E|O}:]{function-name} -> {wrapping-function-name}; …'`**
 
 It wraps given function with the ability to set `$GEM_HOME`, etc. – the
 meaning of the `g`,`n` and `c` flags is the same as in the `fbin''` ice.
@@ -237,7 +259,7 @@ README.md
 
 ---
 
-## 5. **`sbin"[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …"`**
+## 5. **`sbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …'`**
 
 It creates the so called `shim` known from `rbenv` – a wrapper script that
 forwards the call to the actual binary. The script is created always under
@@ -279,8 +301,8 @@ fzf "$@"
 
 ---
 
-## 6. **`fsrc"[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …"`**
-## 7. **`ferc"[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …"`**
+## 6. **`fsrc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**
+## 7. **`ferc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**
 
 Creates a wrapper function that at each invocation sources the given file.
 The second ice, `ferc''` works the same with the single difference that it
