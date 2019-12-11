@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [z-a-bin-gem-node](#z-a-bin-gem-node)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
   - [How it works – bird's-eye view](#how-it-works--birds-eye-view)
   - [How it works, in detail](#how-it-works-in-detail)
   - [The Ice Modifiers Provided By The Annex](#the-ice-modifiers-provided-by-the-annex)
@@ -16,11 +18,13 @@
   - [5. **`sbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …'`**](#5-sbingncneopath-to-binary---name-of-the-script-)
   - [6. **`fsrc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#6-fsrcgncneopath-to-script---name-of-the-function-)
   - [7. **`ferc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#7-fercgncneopath-to-script---name-of-the-function-)
-  - [Installation](#installation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # z-a-bin-gem-node
+
+## Introduction
+
 A Zsh-Zplugin annex (i.e. an extension) that provides functionality, which
 allows to:
 
@@ -45,6 +49,17 @@ allows to:
      uses a function-based mechanism),
   6. Automatic updates of Ruby gems and Node modules during regular plugin and
      snippet updates with `zplugin update …`.
+
+## Installation
+
+Simply load like a regular plugin, i.e.:
+
+```zsh
+zplugin light zplugin/z-a-bin-gem-node
+```
+
+After executing this command you can then use the new ice-mods provided by
+the annex.
 
 ## How it works – bird's-eye view
 
@@ -333,15 +348,5 @@ myscript () {
 **The ices can be empty**. They will then try to create the function for
 trailing component of the `id-as` ice and the other cases, in the same way as
 with the `fbin` ice.
-
-## Installation
-
-Simply load like a regular plugin, i.e.:
-
-```zsh
-zplugin light zplugin/z-a-bin-gem-node
-```
-
-After executing this command you can then use the ice-mods.
 
 <!-- vim:set ft=markdown fo+=an1 autoindent tw=77: -->
