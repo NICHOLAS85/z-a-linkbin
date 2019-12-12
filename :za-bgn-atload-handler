@@ -33,6 +33,9 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         [[ ${srcdst[2]} = \!* ]] && add_fbin=1 || add_fbin=0
         srcdst[2]=${srcdst[2]#\!}
 
+        # Substitute the standard keywords and param''-s
+        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
+
         if (( add_fbin )); then
             local target_binary="g:$dir/bin/${srcdst[1]}"
             ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
@@ -62,6 +65,9 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         [[ ${srcdst[2]} = \!* ]] && add_fbin=1 || add_fbin=0
         srcdst[2]=${srcdst[2]#\!}
+
+        # Substitute the standard keywords and param''-s
+        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
 
         if (( add_fbin )); then
             local target_binary="n:$dir/node_modules/.bin/${srcdst[1]}"
@@ -125,6 +131,9 @@ if (( ${+ZPLG_ICE[fbin]}${+ZPLG_ICE[fsrc]}${+ZPLG_ICE[ferc]} > 0 )) {
         [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
         srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
         
+        # Substitute the standard keywords and param''-s
+        -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
 
         .za-bgn-bin-or-src-function-body "$run_type" \
@@ -160,6 +169,9 @@ if [[ -n "${ZPLG_ICE[fmod]}" ]] {
         [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
         srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
         
+        # Substitute the standard keywords and param''-s
+        -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+
         local target_function="${srcdst[1]}"
 
         .za-bgn-mod-function-body "${srcdst[2]:-${srcdst[1]}}" \
