@@ -51,6 +51,9 @@ if (( ${+ZPLG_ICE[sbin]} )) {
             [[ ${srcdst[1]} = (n|gn|ng):* ]] && set_node_path=1 || set_node_path=0
             srcdst[1]=${srcdst[1]#(n|g|gn|ng):}
 
+            # Substitute the standard keywords and param''-s
+            -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+
             local -a fnames
             local fname
             eval "fnames=( ${srcdst[1]}(Nnon) )"

@@ -27,6 +27,9 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         srcdst[2]=${srcdst[2]#\!}
 
+        # Substitute the standard keywords and param''-s
+        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
+
         gems+=( ${srcdst[2]} )
     }
 
@@ -57,6 +60,9 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         fi
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         srcdst[2]=${srcdst[2]#\!}
+
+        # Substitute the standard keywords and param''-s
+        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
 
         if [[ "$hook" = *atclone ]]; then
             mods+=( ${srcdst[2]} )
@@ -122,6 +128,9 @@ if (( ${+ZPLG_ICE[sbin]} )) {
             [[ ${srcdst[1]} = [gncNEO]#O[gncNEO]#:* ]] && use_out_null=1
             srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
 
+            # Substitute the standard keywords and param''-s
+            -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+
             local -a fnames
             local fname
             eval "fnames=( ${srcdst[1]}(Nnon) )"
@@ -166,6 +175,9 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         srcdst=( ${(@s.->.)fbin} )
         srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
         srcdst[1]=${srcdst[1]#[a-zA-Z]##:}
+
+        # Substitute the standard keywords and param''-s
+        -zplg-substitute 'srcdst[1]'
 
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
 
