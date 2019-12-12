@@ -57,7 +57,6 @@ if (( ${+ZPLG_ICE[sbin]} )) {
             local -a fnames
             local fname
             eval "fnames=( ${srcdst[1]}(Nnon) )"
-            print -rl NAMES: $fnames
             for fname ( $fnames ) {
                 srcdst[1]="$fname"
                 local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
