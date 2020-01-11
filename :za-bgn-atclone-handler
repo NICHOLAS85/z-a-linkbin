@@ -37,7 +37,8 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         if [[ "$hook" = *atclone ]]; then
             command gem install -q --no-user-install -i "$dir" "${gems[@]}"
         elif [[ "$hook" = *atpull ]]; then
-            print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the gems...%f"
+            (( !ICE_OPTS[opt_-q,--quiet] )) && \
+                print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the gems...%f"
             command gem update -q --no-user-install -i "$dir" "${gems[@]}"
         fi
     }
@@ -76,7 +77,11 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         ( builtin cd -q "$dir" && command npm --silent install "${mods[@]}" )
 
     (( perform_update )) && \
-        ( builtin cd -q "$dir" && { print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the node modules...%f";  command npm --silent update } )
+        ( builtin cd -q "$dir" && {
+            (( !ICE_OPTS[opt_-q,--quiet] )) && \
+                print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the node modules...%f";  command npm --silent update
+         }
+        )
 }
 
 #
@@ -158,11 +163,12 @@ if (( ${+ZPLG_ICE[sbin]} )) {
                 command chmod +x "$file" "$target_binary"
 
                 if [[ -x $file ]]; then
-                    if [[ -x $target_binary ]]; then
-                        print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim and properly set +x on the %F{219}${target_binary:t}%F{154} binary%f"
-                    else
-                        print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
-                    fi
+                    (( !ICE_OPTS[opt_-q,--quiet] )) && \
+                        if [[ -x $target_binary ]]; then
+                            print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim and properly set +x on the %F{219}${target_binary:t}%F{154} binary%f"
+                        else
+                            print -P -- "%F{38}bin-gem-node annex: %F{154}${${hook:#*atclone}:+Re-}Created the %F{219}$fnam%F{154} shim %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
+                        fi
                 else
                     print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong creating the %F{219}$fnam%F{160} shim%f"
                 fi
@@ -190,7 +196,8 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         command chmod +x "$target_binary"
 
         if [[ -x $target_binary ]]; then
-            print -P -- "%F{38}bin-gem-node annex: %F{154}Set +x on the %F{219}${target_binary:t}%F{154} binary%f"
+            (( !ICE_OPTS[opt_-q,--quiet] )) && \
+                print -P -- "%F{38}bin-gem-node annex: %F{154}Set +x on the %F{219}${target_binary:t}%F{154} binary%f"
         else
             print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong setting +x on the %F{219}${target_binary:t}%F{160} binary%f"
         fi
