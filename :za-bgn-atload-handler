@@ -14,9 +14,9 @@ local nl=$'\n'
 # gem'' ice
 #
 
-if [[ -n "${ZPLG_ICE[gem]}" ]] {
+if [[ -n "${ZINIT_ICE[gem]}" ]] {
     local -a gems srcdst tmpsdst
-    gems=( "${(s.;.)ZPLG_ICE[gem]}" )
+    gems=( "${(s.;.)ZINIT_ICE[gem]}" )
 
     local gem
     integer add_fbin
@@ -34,11 +34,11 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         srcdst[2]=${srcdst[2]#\!}
 
         # Substitute the standard keywords and param''-s
-        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
+        @zinit-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
 
         if (( add_fbin )); then
             local target_binary="g:$dir/bin/${srcdst[1]}"
-            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
+            ZINIT_ICE[fbin]+="${ZINIT_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
         fi
     }
 }
@@ -47,9 +47,9 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
 # node'' ice
 #
 
-if [[ -n "${ZPLG_ICE[node]}" ]] {
+if [[ -n "${ZINIT_ICE[node]}" ]] {
     local -a nodes srcdst tmpsdst
-    nodes=( "${(s.;.)ZPLG_ICE[node]}" )
+    nodes=( "${(s.;.)ZINIT_ICE[node]}" )
 
     local node
     integer add_fbin
@@ -67,11 +67,11 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         srcdst[2]=${srcdst[2]#\!}
 
         # Substitute the standard keywords and param''-s
-        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
+        @zinit-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
 
         if (( add_fbin )); then
             local target_binary="n:$dir/node_modules/.bin/${srcdst[1]}"
-            ZPLG_ICE[fbin]+="${ZPLG_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
+            ZINIT_ICE[fbin]+="${ZINIT_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
         fi
     }
 }
@@ -81,11 +81,11 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 # or node modules
 #
 
-if (( ${+ZPLG_ICE[fbin]}${+ZPLG_ICE[fsrc]}${+ZPLG_ICE[ferc]} > 0 )) {
+if (( ${+ZINIT_ICE[fbin]}${+ZINIT_ICE[fsrc]}${+ZINIT_ICE[ferc]} > 0 )) {
     local -a fbins fsrcs fercs srcdst
-    fbins=( ${(s.;.)ZPLG_ICE[fbin]} )
-    fsrcs=( ${(s.;.)ZPLG_ICE[fsrc]} )
-    fercs=( ${(s.;.)ZPLG_ICE[ferc]} )
+    fbins=( ${(s.;.)ZINIT_ICE[fbin]} )
+    fsrcs=( ${(s.;.)ZINIT_ICE[fsrc]} )
+    fercs=( ${(s.;.)ZINIT_ICE[ferc]} )
 
     local fbin
     integer run_type=0
@@ -97,9 +97,9 @@ if (( ${+ZPLG_ICE[fbin]}${+ZPLG_ICE[fsrc]}${+ZPLG_ICE[ferc]} > 0 )) {
         [[ "$fbin" = "<sep1>" ]] && { run_type=1; continue; }
         [[ "$fbin" = "<sep2>" ]] && { run_type=2; continue; }
 
-        if [[ ( ${+ZPLG_ICE[fbin]} -eq 1 && run_type -eq 0 && -z $fbin && ${#fbins} -eq 0 ) || \
-            ( ${+ZPLG_ICE[fsrc]} -eq 1 && run_type -eq 1 && -z $fbin && ${#fsrcs} -eq 0 ) || \
-            ( ${+ZPLG_ICE[ferc]} -eq 1 && run_type -eq 2 && -z $fbin && ${#fercs} -eq 0 )
+        if [[ ( ${+ZINIT_ICE[fbin]} -eq 1 && run_type -eq 0 && -z $fbin && ${#fbins} -eq 0 ) || \
+            ( ${+ZINIT_ICE[fsrc]} -eq 1 && run_type -eq 1 && -z $fbin && ${#fsrcs} -eq 0 ) || \
+            ( ${+ZINIT_ICE[ferc]} -eq 1 && run_type -eq 2 && -z $fbin && ${#fercs} -eq 0 )
         ]]; then
             if [[ -f $dir/${id_as:t} ]]; then
                 fbin="$dir/${id_as:t}"
@@ -132,7 +132,7 @@ if (( ${+ZPLG_ICE[fbin]}${+ZPLG_ICE[fsrc]}${+ZPLG_ICE[ferc]} > 0 )) {
         srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
         
         # Substitute the standard keywords and param''-s
-        -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+        @zinit-substitute 'srcdst[1]' 'srcdst[2]'
 
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}"
 
@@ -149,9 +149,9 @@ if (( ${+ZPLG_ICE[fbin]}${+ZPLG_ICE[fsrc]}${+ZPLG_ICE[ferc]} > 0 )) {
 # fmod'' ice
 #
 
-if [[ -n "${ZPLG_ICE[fmod]}" ]] {
+if [[ -n "${ZINIT_ICE[fmod]}" ]] {
     local -a fmods srcdst
-    fmods=( "${(s.;.)ZPLG_ICE[fmod]}" )
+    fmods=( "${(s.;.)ZINIT_ICE[fmod]}" )
 
     local fmod
 
@@ -170,7 +170,7 @@ if [[ -n "${ZPLG_ICE[fmod]}" ]] {
         srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
         
         # Substitute the standard keywords and param''-s
-        -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+        @zinit-substitute 'srcdst[1]' 'srcdst[2]'
 
         local target_function="${srcdst[1]}"
 

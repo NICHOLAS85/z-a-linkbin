@@ -14,9 +14,9 @@ local nl=$'\n'
 # sbin'' ice – creation of shims (the name borrowed from rbenv)
 #
 
-if (( ${+ZPLG_ICE[sbin]} )) {
+if (( ${+ZINIT_ICE[sbin]} )) {
     local -a sbins srcdst
-    sbins=( ${(s.;.)ZPLG_ICE[sbin]} )
+    sbins=( ${(s.;.)ZINIT_ICE[sbin]} )
 
     local sbin
     integer set_gem_home set_node_path
@@ -52,7 +52,7 @@ if (( ${+ZPLG_ICE[sbin]} )) {
             srcdst[1]=${srcdst[1]#(n|g|gn|ng):}
 
             # Substitute the standard keywords and param''-s
-            -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+            @zinit-substitute 'srcdst[1]' 'srcdst[2]'
 
             local -a fnames
             local fname

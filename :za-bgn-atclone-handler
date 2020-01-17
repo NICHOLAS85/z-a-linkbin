@@ -10,9 +10,9 @@ setopt extendedglob warncreateglobal typesetsilent noshortloops
 
 local nl=$'\n'
 
-if [[ -n "${ZPLG_ICE[gem]}" ]] {
+if [[ -n "${ZINIT_ICE[gem]}" ]] {
     local -a gem_defs srcdst tmpsdst gems
-    gem_defs=( "${(s.;.)ZPLG_ICE[gem]}" )
+    gem_defs=( "${(s.;.)ZINIT_ICE[gem]}" )
 
     local gem
 
@@ -28,7 +28,7 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
         srcdst[2]=${srcdst[2]#\!}
 
         # Substitute the standard keywords and param''-s
-        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
+        @zinit-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
 
         gems+=( ${srcdst[2]} )
     }
@@ -47,9 +47,9 @@ if [[ -n "${ZPLG_ICE[gem]}" ]] {
     }
 }
 
-if [[ -n "${ZPLG_ICE[node]}" ]] {
+if [[ -n "${ZINIT_ICE[node]}" ]] {
     local -a node_defs srcdst tmpsdst mods
-    node_defs=( "${(s.;.)ZPLG_ICE[node]}" )
+    node_defs=( "${(s.;.)ZINIT_ICE[node]}" )
 
     local node
     integer perform_update=0
@@ -66,7 +66,7 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
         srcdst[2]=${srcdst[2]#\!}
 
         # Substitute the standard keywords and param''-s
-        -zplg-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
+        @zinit-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
 
         if [[ "$hook" = *atclone ]]; then
             mods+=( ${srcdst[2]} )
@@ -96,9 +96,9 @@ if [[ -n "${ZPLG_ICE[node]}" ]] {
 # sbin'' ice – creation of shims (the name borrowed from rbenv)
 #
 
-if (( ${+ZPLG_ICE[sbin]} )) {
+if (( ${+ZINIT_ICE[sbin]} )) {
     local -a sbins srcdst
-    sbins=( ${(s.;.)ZPLG_ICE[sbin]} )
+    sbins=( ${(s.;.)ZINIT_ICE[sbin]} )
 
     local sbin
 
@@ -142,7 +142,7 @@ if (( ${+ZPLG_ICE[sbin]} )) {
             srcdst[1]=${srcdst[1]#[a-zA-Z]#:}
 
             # Substitute the standard keywords and param''-s
-            -zplg-substitute 'srcdst[1]' 'srcdst[2]'
+            @zinit-substitute 'srcdst[1]' 'srcdst[2]'
 
             local -a fnames
             local fname
@@ -185,9 +185,9 @@ if (( ${+ZPLG_ICE[sbin]} )) {
     )
 }
 
-if [[ -n "${ZPLG_ICE[fbin]}" ]] {
+if [[ -n "${ZINIT_ICE[fbin]}" ]] {
     local -a fbins srcdst
-    fbins=( "${(s.;.)ZPLG_ICE[fbin]}" )
+    fbins=( "${(s.;.)ZINIT_ICE[fbin]}" )
 
     local fbin
 
@@ -197,7 +197,7 @@ if [[ -n "${ZPLG_ICE[fbin]}" ]] {
         srcdst[1]=${srcdst[1]#[a-zA-Z]##:}
 
         # Substitute the standard keywords and param''-s
-        -zplg-substitute 'srcdst[1]'
+        @zinit-substitute 'srcdst[1]'
 
         local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
 
