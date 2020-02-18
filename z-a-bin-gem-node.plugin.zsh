@@ -9,31 +9,31 @@
 
 autoload .za-bgn-bin-or-src-function-body \
     .za-bgn-mod-function-body \
-    :za-bgn-atload-handler :za-bgn-atclone-handler \
-    :za-bgn-atpull-handler :za-bgn-help-handler \
-    :za-bgn-atdelete-handler
+    →za-bgn-atload-handler →za-bgn-atclone-handler \
+    →za-bgn-atpull-handler →za-bgn-help-handler \
+    →za-bgn-atdelete-handler
 
 # An empty stub to fill the help handler fields
-:za-bgn-help-null-handler() { :; }
+→za-bgn-help-null-handler() { :; }
 
 @zinit-register-annex "z-a-bin-gem-node" \
     hook:\!atload \
-    :za-bgn-atload-handler \
-    :za-bgn-help-handler \
+    →za-bgn-atload-handler \
+    →za-bgn-help-handler \
     "fbin''|sbin|sbin''|gem''|node''|fmod''|fsrc''|ferc''" # also register new ices
 
 @zinit-register-annex "z-a-bin-gem-node" \
     hook:atclone \
-    :za-bgn-atclone-handler \
-    :za-bgn-help-null-handler
+    →za-bgn-atclone-handler \
+    →za-bgn-help-null-handler
 
 @zinit-register-annex "z-a-bin-gem-node" \
     hook:\%atpull \
-    :za-bgn-atclone-handler \
-    :za-bgn-help-null-handler
+    →za-bgn-atclone-handler \
+    →za-bgn-help-null-handler
 
 @zinit-register-annex "z-a-bin-gem-node" \
     hook:atdelete \
-    :za-bgn-atdelete-handler \
-    :za-bgn-help-null-handler
+    →za-bgn-atdelete-handler \
+    →za-bgn-help-null-handler
 
