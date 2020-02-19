@@ -63,6 +63,14 @@ the annex.
 
 ## How it works – bird's-eye view
 
+**Note:** the README is somewhat outdated – the `sbin''` ice that creates
+forwarder-scripts instead of forwarder-functions (created by the `fbin''` ice
+and elaborated in this `How it works …` section) turned out to be the proper,
+best method for exposing binary programs and scripts. You can jump to the
+`sbin''` ice [section](#5-sbingncneopath-to-binary---name-of-the-script-) if
+you want or read on, as the forwarder-scripts are pretty similar to the
+forwarder-functions elaborated on in the following text: 
+
 Below is a diagram explaining the major feature – exposing a binary program
 or script through a Zsh function of the same name:
 
