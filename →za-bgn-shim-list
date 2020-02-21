@@ -52,6 +52,7 @@ cands=( $ZPFX/bin/*(.-NDL-1000) )
 local rempat="(${ZINIT[PLUGINS_DIR]}|${ZINIT[SNIPPETS_DIR]}"
 rempat+="|${ZINIT[PLUGINS_DIR]/.zinit/.zplugin}"
 rempat+="|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})"
+local snippat="(${ZINIT[SNIPPETS_DIR]}|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})/*"
 
 local file
 for file ( $cands ) {
