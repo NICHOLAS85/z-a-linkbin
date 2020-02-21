@@ -4,7 +4,8 @@
 # License: MIT
 
 # Synopsis:
-#   zinit shim-list [-l|--local-dir] [-c|--cat] [-i|--from-ices]
+#   zinit shim-list [-l|--local-dir] [-c|--cat] [-i|--from-ices] \
+#		    [-o|--one-line]
 #
 
 emulate -LR zsh
@@ -15,11 +16,13 @@ autoload is-at-least
 local is_58
 is-at-least 5.8 && is_58=1
 
-local -a opt_local_dir opt_cat opt_from_ices
+local -a opt_help opt_local_dir opt_cat opt_from_ices opt_one_line
 zparseopts -D -E ${is_58:+-F} \
+	      h=opt_help -help=opt_help \
 	      l=opt_local_dir -local-dir=opt_local_dir \
 	      c=opt_cat -cat=opt_cat \
-	      i=opt_from_ices -from-ices=opt_from_ices || \
+	      i=opt_from_ices -from-ices=opt_from_ices \
+	      o=opt_one_line -one-line=opt_one_line || \
 		{ 
 		  print -Pr "$ZINIT[col-error]Error:$ZINIT[col-msg2]" \
 		    "Incorrect options given to" \
@@ -28,11 +31,19 @@ zparseopts -D -E ${is_58:+-F} \
 		  return 1
 		}
 
+(( ${#opt_help} )) && {
+    print -P "$ZINIT[col-obj]Usage:%f\n" \
+	"zinit shim-list [-l|--local-dir] [-c|--cat] [-i|--from-ices] \\\\\n" \
+	"	    [-o|--one-line]"
+    return 0
+}
+
 local nl=$'\n' brace='{' quote='"'
 local pattern='(#s)\#!/usr/bin/env zsh
 
 function * {
     local bindir="'
+
 local -a cands
 cands=( $ZPFX/bin/*(.-NDL-1000) )
 
