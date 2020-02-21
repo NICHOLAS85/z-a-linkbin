@@ -60,7 +60,9 @@ for file ( $cands ) {
 	print -r ${${:-$opt_one_line$opt_long}:+-n} -- ${file:t}" "
 	if (( ${#opt_long} )) {
 	    if [[ $body = (#b)$~pattern([^$nl]##)$nl* ]] {
-		print -r -- ${${${match[1]##$~rempat}##/##}%\"}
+		(( ${+functions[.zinit-first]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh"
+		.zinit-any-colorify-as-uspl2 "${${${match[1]##$~rempat}##/##}%\"}"
+		print -r -- "$REPLY"
 	    }
 	}
     }
