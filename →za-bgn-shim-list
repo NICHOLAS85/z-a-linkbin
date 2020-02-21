@@ -55,36 +55,39 @@ rempat+="|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})"
 local snippat="(${ZINIT[SNIPPETS_DIR]}|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})/*"
 
 local file
+local -a found
 integer longest len
 for file ( $cands ) {
-    len=${#${file:t}}
-    (( len > longest )) && longest=len
+    local body="$(<$file)"
+    if [[ -n ${body[(r)$pattern]} ]] {
+	len=${#${file:t}}
+	(( len > longest )) && longest=len
+	found+=( $file )
+    }
 }
 
-for file ( $cands ) {
+for file ( $found ) {
     local body="$(<$file)" name=$file:t
-    if [[ -n ${body[(r)$pattern]} ]] {
-	print -r ${${:-$opt_one_line$opt_long}:+-n} -- ${file:t}" " \
-	    ${opt_long:+${(l:longest+1-${#name}:: :):-}}
+    print -r ${${:-$opt_one_line$opt_long}:+-n} -- ${file:t}" " \
+	${opt_long:+${(l:longest+1-${#name}:: :):-}}
 
-	if (( ${#opt_long} )) {
-	    if [[ $body = (#b)$~pattern([^$nl]##)$nl* ]] {
-		local pth=${match[1]%\"}
-		local id_as=${${${pth##$~rempat}##/##}%\"}
-		if [[ $pth = $~snippat ]] {
-		    if [[ $id_as = ((OMZ|PZT)::|(#i)(http(s|)|ftp(s|)|rsync|ssh)--)* ]] {
-			{ local url="$(<$pth/._zinit/url)" } 2>/dev/null
-		    } else {
-			local -A map
-			map=( -- "/" -EQ- "=" -QM- "?" -AMP- "&" )
-			url=${id_as//(#m)(${(~j:|:k)map})/${map[$MATCH]}}
-		    }
-		    print -r "$ZINIT[col-obj]$url$ZINIT[col-rst]"
+    if (( ${#opt_long} )) {
+	if [[ $body = (#b)$~pattern([^$nl]##)$nl* ]] {
+	    local pth=${match[1]%\"}
+	    local id_as=${${${pth##$~rempat}##/##}%\"}
+	    if [[ $pth = $~snippat ]] {
+		if [[ $id_as = ((OMZ|PZT)::|(#i)(http(s|)|ftp(s|)|rsync|ssh)--)* ]] {
+		    { local url="$(<$pth/._zinit/url)" } 2>/dev/null
 		} else {
-		    (( ${+functions[.zinit-first]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh"
-		    .zinit-any-colorify-as-uspl2 "$id_as"
-		    print -r -- "$REPLY"
+		    local -A map
+		    map=( -- "/" -EQ- "=" -QM- "?" -AMP- "&" )
+		    url=${id_as//(#m)(${(~j:|:k)map})/${map[$MATCH]}}
 		}
+		print -r "$ZINIT[col-obj]$url$ZINIT[col-rst]"
+	    } else {
+		(( ${+functions[.zinit-first]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh"
+		.zinit-any-colorify-as-uspl2 "$id_as"
+		print -r -- "$REPLY"
 	    }
 	}
     }
