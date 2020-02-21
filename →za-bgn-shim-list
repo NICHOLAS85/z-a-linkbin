@@ -55,10 +55,18 @@ rempat+="|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})"
 local snippat="(${ZINIT[SNIPPETS_DIR]}|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})/*"
 
 local file
+integer longest len
 for file ( $cands ) {
-    local body="$(<$file)"
+    len=${#${file:t}}
+    (( len > longest )) && longest=len
+}
+
+for file ( $cands ) {
+    local body="$(<$file)" name=$file:t
     if [[ -n ${body[(r)$pattern]} ]] {
-	print -r ${${:-$opt_one_line$opt_long}:+-n} -- ${file:t}" "
+	print -r ${${:-$opt_one_line$opt_long}:+-n} -- ${file:t}" " \
+	    ${opt_long:+${(l:longest+1-${#name}:: :):-}}
+
 	if (( ${#opt_long} )) {
 	    if [[ $body = (#b)$~pattern([^$nl]##)$nl* ]] {
 		local pth=${match[1]%\"}
