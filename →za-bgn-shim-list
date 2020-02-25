@@ -4,7 +4,7 @@
 # License: MIT
 
 # Synopsis:
-#   zinit shim-list [-l|--this-dir] [-c|--cat] [-i|--from-ices] \
+#   zinit shim-list [-t|--this-dir] [-c|--cat] [-i|--from-ices] \
 #		    [-o|--one-line] [-l|--long]
 #
 
@@ -35,7 +35,7 @@ zparseopts -D -E ${is_58:+-F} \
 
 (( ${#opt_help} )) && {
     print -P "$ZINIT[col-obj]Usage:%f\n" \
-	"zinit shim-list [-l|--this-dir] [-c|--cat] [-i|--from-ices] \\\\\n" \
+	"zinit shim-list [-t|--this-dir] [-c|--cat] [-i|--from-ices] \\\\\n" \
 	"	    [-o|--one-line] [-l|--long]"
     return 0
 }
