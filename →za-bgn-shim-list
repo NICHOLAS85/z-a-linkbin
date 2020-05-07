@@ -8,6 +8,8 @@
 #		    [-o|--one-line] [-l|--long]
 #
 
+→za-bgn-shim-list() {
+
 emulate -LR zsh
 setopt extended_glob warn_create_global typeset_silent \
         no_short_loops rc_quotes
@@ -93,5 +95,7 @@ for file ( $found ) {
     }
 }
 (( ${#opt_one_line} )) && print
+
+}
 
 # vim:ft=zsh:sw=4:sts=4:noet:
