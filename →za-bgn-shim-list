@@ -49,7 +49,8 @@ function * {
     local bindir="'
 
 local -a cands
-cands=( $ZPFX/bin/*(.-NDL-1000) )
+cands=( ${${opt_this_dir:+.}:-$ZPFX/bin/*(.-NDL-1000)} )
+cands=( ${cands:#.} )
 
 local rempat="(${ZINIT[PLUGINS_DIR]}|${ZINIT[SNIPPETS_DIR]}"
 rempat+="|${ZINIT[PLUGINS_DIR]/.zinit/.zplugin}"
