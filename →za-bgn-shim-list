@@ -79,7 +79,7 @@ for file ( $found ) {
 	    local pth=${match[1]%\"}
 	    local id_as=${${${pth##$~rempat}##/##}%\"}
 	    if [[ $pth = $~snippat ]] {
-		if [[ $id_as = ((OMZ|PZT)::|(#i)(http(s|)|ftp(s|)|rsync|ssh)--)* ]] {
+		if [[ $id_as = ((OMZ|PZT|PZTM|OMZP|OMZT)::|(#i)(http(s|)|ftp(s|)|rsync|ssh)--)* ]] {
 		    { local url="$(<$pth/._zinit/url)" } 2>/dev/null
 		} else {
 		    local -A map
