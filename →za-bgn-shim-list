@@ -42,60 +42,81 @@ zparseopts -D -E ${is_58:+-F} \
     return 0
 }
 
-local nl=$'\n' brace='{' quote='"'
-local pattern='(#s)\#!/usr/bin/env zsh
+if (( !${#opt_from_ices} )) {
+    local nl=$'\n' brace='{' quote='"'
+    local pattern='(#s)\#!/usr/bin/env zsh
 
-function * {
-    local bindir="'
+    function * {
+	local bindir="'
 
-local -a cands
-cands=( ${${opt_this_dir:+.}:-$ZPFX/bin}/*(.-NDL-1000) )
-cands=( ${cands:#.} )
+    local -a cands
+    cands=( ${${opt_this_dir:+.}:-$ZPFX/bin}/*(.-NDL-1000) )
+    cands=( ${cands:#.} )
 
-local rempat="(${ZINIT[PLUGINS_DIR]}|${ZINIT[SNIPPETS_DIR]}"
-rempat+="|${ZINIT[PLUGINS_DIR]/.zinit/.zplugin}"
-rempat+="|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})"
-local snippat="(${ZINIT[SNIPPETS_DIR]}|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})/*"
+    local rempat="(${ZINIT[PLUGINS_DIR]}|${ZINIT[SNIPPETS_DIR]}"
+    rempat+="|${ZINIT[PLUGINS_DIR]/.zinit/.zplugin}"
+    rempat+="|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})"
+    local snippat="(${ZINIT[SNIPPETS_DIR]}|${ZINIT[SNIPPETS_DIR]/.zinit/.zplugin})/*"
 
-local file
-local -a found
-integer longest len
-for file ( $cands ) {
-    local body="$(<$file)"
-    if [[ -n ${body[(r)$pattern]} ]] {
-	len=${#${file:t}}
-	(( len > longest )) && longest=len
-	found+=( $file )
+    local file
+    local -a found
+    integer longest len
+    for file ( $cands ) {
+	local body="$(<$file)"
+	if [[ -n ${body[(r)$pattern]} ]] {
+	    len=${#${file:t}}
+	    (( len > longest )) && longest=len
+	    found+=( $file )
+	}
     }
-}
 
-for file ( $found ) {
-    local body="$(<$file)" name=$file:t
-    print -r ${${:-$opt_one_line${(M)${opt_short:-1}:#1}}:+-n} -- ${file:t}" " \
-	${${(M)${opt_short:-1}:#1}:+${(l:longest+1-${#name}:: :):-}}
+    for file ( $found ) {
+	local body="$(<$file)" name=$file:t
+	print -r ${${:-$opt_one_line${(M)${opt_short:-1}:#1}}:+-n} -- ${file:t}" " \
+	    ${${(M)${opt_short:-1}:#1}:+${(l:longest+1-${#name}:: :):-}}
 
-    if (( !${#opt_short} )) {
-	if [[ $body = (#b)$~pattern([^$nl]##)$nl* ]] {
-	    local pth=${match[1]%\"}
-	    local id_as=${${${pth##$~rempat}##/##}%\"}
-	    if [[ $pth = $~snippat ]] {
-		if [[ $id_as = ((OMZ|PZT|PZTM|OMZP|OMZT|OMZL)::|(#i)(http(s|)|ftp(s|)|rsync|ssh)--)* ]] {
-		    { local url="$(<$pth/._zinit/url)" } 2>/dev/null
+	if (( !${#opt_short} )) {
+	    if [[ $body = (#b)$~pattern([^$nl]##)$nl* ]] {
+		local pth=${match[1]%\"}
+		local id_as=${${${pth##$~rempat}##/##}%\"}
+		if [[ $pth = $~snippat ]] {
+		    if [[ $id_as = ((OMZ|PZT|PZTM|OMZP|OMZT|OMZL)::|(#i)(http(s|)|ftp(s|)|rsync|ssh)--)* ]] {
+			{ local url="$(<$pth/._zinit/url)" } 2>/dev/null
+		    } else {
+			local -A map
+			map=( -- "/" -EQ- "=" -QM- "?" -AMP- "&" )
+			local url=${id_as//(#m)(${(~j:|:k)map})/${map[$MATCH]}}
+		    }
+		    print -r "$ZINIT[col-obj]$url$ZINIT[col-rst]"
 		} else {
-		    local -A map
-		    map=( -- "/" -EQ- "=" -QM- "?" -AMP- "&" )
-		    local url=${id_as//(#m)(${(~j:|:k)map})/${map[$MATCH]}}
+		    (( ${+functions[.zinit-first]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh"
+		    .zinit-any-colorify-as-uspl2 "$id_as"
+		    print -r -- "$REPLY"
 		}
-		print -r "$ZINIT[col-obj]$url$ZINIT[col-rst]"
-	    } else {
-		(( ${+functions[.zinit-first]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh"
-		.zinit-any-colorify-as-uspl2 "$id_as"
-		print -r -- "$REPLY"
+	    }
+	}
+    }
+    (( ${#opt_one_line} )) && print
+
+} else {
+    +zinit-message '[msg2]Listing shims basing on the in-memory ices data...[rst]'
+    local p
+    local -A ices
+    for p ( $ZINIT_REGISTERED_PLUGINS ) {
+	if [[ -n $ZINIT_SICE[$p] ]] {
+	    ices=( "${(@Q)${(@z)ZINIT_SICE[$p]}}" )
+	    local sbin
+	    local -a sbins
+	    sbins=( ${(s.;.)ices[sbin]} )
+	    if (( ${#sbins} )) {
+		.zinit-any-colorify-as-uspl2 "$p"
+	    }
+	    for sbin ( $sbins ) {
+		print "${(r:50:: :)sbin} $REPLY"
 	    }
 	}
     }
 }
-(( ${#opt_one_line} )) && print
 
 }
 
