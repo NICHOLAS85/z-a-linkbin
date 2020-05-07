@@ -84,7 +84,7 @@ for file ( $found ) {
 		} else {
 		    local -A map
 		    map=( -- "/" -EQ- "=" -QM- "?" -AMP- "&" )
-		    url=${id_as//(#m)(${(~j:|:k)map})/${map[$MATCH]}}
+		    local url=${id_as//(#m)(${(~j:|:k)map})/${map[$MATCH]}}
 		}
 		print -r "$ZINIT[col-obj]$url$ZINIT[col-rst]"
 	    } else {
