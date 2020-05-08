@@ -18,6 +18,7 @@
   - [5. **`sbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …'`**](#5-sbingncneopath-to-binary---name-of-the-script-)
   - [6. **`fsrc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#6-fsrcgncneopath-to-script---name-of-the-function-)
   - [7. **`ferc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#7-fercgncneopath-to-script---name-of-the-function-)
+- [Additional Zinit commands](#additional-zinit-commands)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
