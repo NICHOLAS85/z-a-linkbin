@@ -46,8 +46,8 @@ if (( !${#opt_from_ices} )) {
     local nl=$'\n' brace='{' quote='"'
     local pattern='(#s)\#!/usr/bin/env zsh
 
-    function * {
-	local bindir="'
+function * {
+    local bindir="'
 
     local -a cands
     cands=( ${${opt_this_dir:+.}:-$ZPFX/bin}/*(.-NDL-1000) )
