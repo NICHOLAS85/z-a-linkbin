@@ -357,4 +357,36 @@ myscript () {
 trailing component of the `id-as` ice and the other cases, in the same way as
 with the `fbin` ice.
 
+# Additional Zinit commands
+
+There's an additional Zinit command that's provided by this annex
+–`shim-list`. It searches for and displays any shims that are being
+currently stored under `$ZPFX/bin`. Example invocation:
+
+![shim-list
+invocation](https://raw.githubusercontent.com/zinit-zsh/z-a-bin-gem-node/master/images/shim-list.png)
+
+Available options are:
+
+```zsh
+zinit shim-list [-t|--this-dir] [-c|--cat] [-i|--from-ices] \
+ 	    [-o|--one-line] [-s|--short]
+```
+
+The options' meanings:
+
+- `-t/--this-dir`  – instructs Zinit to look for shims in the current
+  directory instead of `$ZPFX/bin`,
+- `-c/--cat`       – displays contents of each of the found shim
+  (unimplemented yet),
+- `-i/--from-ices` – normally the code looks for the shim files by examining
+  their contents (shims created by BGN annex have a fixed structure); this
+  option instructs Zinit to show the list of shims that results from the
+  `sbin''` ice of the loaded plugins; i.e.: if a plugin has `sbin'git-open'`,
+  for example, then this means that there has to be such shim already
+  created,
+- `-o/--one-line`  – display the list of shim files without line breaks, in
+  single line, after spaces,
+- `-s/--short`     – don't show the plugin/snippet that the shim belongs to.
+
 <!-- vim:set ft=markdown fo+=an1 autoindent tw=77: -->
