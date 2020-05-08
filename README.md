@@ -370,16 +370,15 @@ invocation](https://raw.githubusercontent.com/zinit-zsh/z-a-bin-gem-node/master/
 Available options are:
 
 ```zsh
-zinit shim-list [-t|--this-dir] [-c|--cat] [-i|--from-ices] \
- 	    [-o|--one-line] [-s|--short]
+zinit shim-list [-h/--help] [-t|--this-dir] [-i|--from-ices] \
+ 	    [-o|--one-line] [-s|--short] [-c|--cat]
 ```
 
 The options' meanings:
 
+- `-h/--help` – shows a usage information,
 - `-t/--this-dir`  – instructs Zinit to look for shims in the current
   directory instead of `$ZPFX/bin`,
-- `-c/--cat`       – displays contents of each of the found shim
-  (unimplemented yet),
 - `-i/--from-ices` – normally the code looks for the shim files by examining
   their contents (shims created by BGN annex have a fixed structure); this
   option instructs Zinit to show the list of shims that results from the
@@ -388,6 +387,8 @@ The options' meanings:
   created,
 - `-o/--one-line`  – display the list of shim files without line breaks, in
   single line, after spaces,
-- `-s/--short`     – don't show the plugin/snippet that the shim belongs to.
+- `-s/--short`     – don't show the plugin/snippet that the shim belongs to,
+- `-c/--cat`       – displays contents of each of the found shim
+  (unimplemented yet).
 
 <!-- vim:set ft=markdown fo+=an1 autoindent tw=77: -->
