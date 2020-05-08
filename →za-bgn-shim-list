@@ -42,6 +42,9 @@ zparseopts -D -E ${is_58:+-F} \
     return 0
 }
 
+(( !${+functions[.zinit-any-colorify-as-uspl2]} )) && \
+    builtin source $ZINIT[BIN_DIR]/zinit-side.zsh
+
 if (( !${#opt_from_ices} )) {
     local nl=$'\n' brace='{' quote='"'
     local pattern='(#s)\#!/usr/bin/env zsh
