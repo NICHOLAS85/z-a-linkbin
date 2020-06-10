@@ -4,7 +4,7 @@
 # FUNCTION: .za-bgn-bin-or-src-function-body
 # Returns the body of the function wrapping a binary
 
-local name="$2" bin="$3" dir="$4"
+local name="$2" bin="$3" dir="${4#%}"
 integer run_type="$1" set_gem_home="$5" \
     set_node_path="$6" set_cwd="$7" \
     use_all_null="$8" use_err_null="$9" use_out_null="$10"

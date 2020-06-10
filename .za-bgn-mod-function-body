@@ -3,7 +3,7 @@
 #
 # Returns the body of the function wrapping a function
 
-local name="$1" target_func="$2" dir="$3"
+local name="$1" target_func="$2" dir="${3#%}"
 integer set_gem_home="$4" set_node_path="$5" set_cwd="$6" \
         use_all_null="$7" use_err_null="$8" use_out_null="$9"
 
