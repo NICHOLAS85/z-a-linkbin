@@ -1,6 +1,8 @@
 # Copyright (c) 2019 Sebastian Gniazdowski
 # License MIT
 
+→za-bgn-atload-handler() {
+
 emulate -RL zsh
 setopt extendedglob warncreateglobal typesetsilent noshortloops
 
@@ -180,6 +182,8 @@ if [[ -n "${ZINIT_ICE[fmod]}" ]] {
                        "$use_err_null" "$use_out_null"
         eval "$REPLY"
     }
+}
+
 }
 
 # vim:ft=zsh:sw=4:sts=4:et
