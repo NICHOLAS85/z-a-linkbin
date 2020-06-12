@@ -112,7 +112,7 @@ if (( ${+ZINIT_ICE[sbin]} )) {
             integer set_gem_home=0 set_node_path=0 set_cwd=0 \
                     use_all_null=0 use_err_null=0 use_out_null=0
 
-            if [[ -z $sbin && ${#sbins} -eq 0 ]]; then
+            if [[ -z $sbin && ${#sbins} -eq 0 ]] {
                 if [[ -f $dir/${id_as:t} ]]; then
                     sbin="$dir/${id_as:t}"
                 elif [[ -n $plugin && -f $dir/$plugin ]]; then
@@ -129,9 +129,9 @@ if (( ${+ZINIT_ICE[sbin]} )) {
                         break
                     fi
                 fi
-            elif [[ -z $sbin ]]; then
+            } elif [[ -z $sbin ]] {
                 continue
-            fi
+            }
 
             srcdst=( ${(@s.->.)sbin} )
             srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
