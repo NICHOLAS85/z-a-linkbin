@@ -1,6 +1,8 @@
 # Copyright (c) 2019 Sebastian Gniazdowski
 # License MIT
 
+→za-bgn-atclone-handler() {
+
 emulate -RL zsh
 setopt extendedglob warncreateglobal typesetsilent noshortloops
 
@@ -211,6 +213,8 @@ if [[ -n "${ZINIT_ICE[fbin]}" ]] {
             print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong setting +x on the %F{219}${target_binary:t}%F{160} binary%f"
         fi
     }
+}
+
 }
 
 # vim:ft=zsh:sw=4:sts=4:et
