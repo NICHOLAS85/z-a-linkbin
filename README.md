@@ -19,6 +19,7 @@
   - [6. **`fsrc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#6-fsrcgncneopath-to-script---name-of-the-function-)
   - [7. **`ferc'[{g|n|c|N|E|O}:]{path-to-script}[ -> {name-of-the-function}]; …'`**](#7-fercgncneopath-to-script---name-of-the-function-)
 - [Additional Zinit commands](#additional-zinit-commands)
+- [Cygwin support](#cygwin-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -390,5 +391,20 @@ The options' meanings:
 - `-s/--short`     – don't show the plugin/snippet that the shim belongs to,
 - `-c/--cat`       – displays contents of each of the found shim
   (unimplemented yet).
+
+# Cygwin Support
+
+The `sbin''` ice has an explicit Cygwin support – it creates additional,
+**extra shim files** – Windows batch scripts that allow to run the shielded
+applications from e.g.: Windows run dialog – if the `~/.zinit/polaris/bin`
+directory is being added to the Windows `PATH` environment variable, for
+example (it is a good idea to do so, IMHO). The Windows shims have the same
+name as the standard ones (which are also being created, normally) plus the
+`.cmd` extension. You can test the feature by e.g.: installing Firefox from
+the Zinit package via:
+
+```zsh
+zinit pack=bgn for firefox
+```
 
 <!-- vim:set ft=markdown fo+=an1 autoindent tw=77: -->
