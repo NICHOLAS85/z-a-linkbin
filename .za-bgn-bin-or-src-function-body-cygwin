@@ -26,11 +26,11 @@ cd ${dir}"}
 "
 
 if (( run_type == 0 )); then
-    REPLY+="%bindir%\\${bint}"
+    REPLY+="%bindir%\\${bint} %*"
 elif (( run_type == 1 )); then
-    REPLY+="zsh -c 'source \"%bindir%\"\\\\\\\\${bint}'"
+    REPLY+="zsh -c 'source \"%bindir%\"\\\\\\\\${bint} %*'"
 elif (( run_type == 2 )); then
-    REPLY+="zsh -c 'eval \"\$(<\"%bindir%\"\\\\\\\\${bint})\"'"
+    REPLY+="zsh -c '() { eval \"\$(<\"%bindir%\"\\\\\\\\${bint})\" } %*'"
 fi
 
 (( use_all_null )) && REPLY+=" 2>NUL >NUL"

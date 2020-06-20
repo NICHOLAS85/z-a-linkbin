@@ -164,6 +164,17 @@ if (( ${+ZINIT_ICE[sbin]} )) {
                     fnam="${srcdst[2]:-${srcdst[1]:t}}"
                 local file="$ZPFX/bin/$fnam"
 
+                if [[ $OSTYPE == cygwin ]]; then
+                    .za-bgn-bin-or-src-function-body-cygwin 0 \
+                                "$fnam" \
+                                "$target_binary" "$dir" "$set_gem_home" \
+                                "$set_node_path" "$set_cwd" "$use_all_null" \
+                                "$use_err_null" "$use_out_null"
+                        builtin print -r -- "$REPLY" \
+                            >! "$file.cmd"
+                        command chmod +x "$file.cmd"
+                fi
+                
                 .za-bgn-bin-or-src-function-body 0 \
                             "$fnam" \
                             "$target_binary" "$dir" "$set_gem_home" \

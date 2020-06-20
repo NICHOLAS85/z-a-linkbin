@@ -8,6 +8,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 autoload .za-bgn-bin-or-src-function-body \
+     .za-bgn-bin-or-src-function-body-cygwin \
     .za-bgn-mod-function-body \
     →za-bgn-atload-handler →za-bgn-atclone-handler \
     →za-bgn-atpull-handler →za-bgn-help-handler \
