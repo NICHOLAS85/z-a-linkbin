@@ -12,8 +12,7 @@ integer run_type="$1" set_gem_home="$5" \
 local nl=$'\n' tab=$'    '
 
 dir=`cygpath -w "$dir"`
-binh=`cygpath -w "${bin:h}"`
-bint=`cygpath -w "${bin:t}"`
+local binh=`command cygpath -w "${bin:h}"` bint=`command cygpath -w "${bin:t}"`
 
 REPLY="
 @echo off
