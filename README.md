@@ -127,10 +127,12 @@ which is being already added to the `$PATH` by Zinit when it is being
 sourced:
 
 ```zsh
-% cat `which fzf`
-fzf () {
-        local bindir="/home/sg/.zinit/plugins/junegunn---fzf-bin"
-        "$bindir"/"fzf" "$@"
+% cat $ZPFX/bin/fzf
+#!/usr/bin/env zsh
+
+function fzf {
+    local bindir="/home/sg/.zinit/plugins/junegunn---fzf-bin"
+    "$bindir"/"fzf" "$@"
 }
 
 fzf "$@"
