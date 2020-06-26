@@ -89,7 +89,9 @@ then cd back to the original directory after the execution is finished.
 
 Also, like already mentioned, instead of the function an automatically
 created script – so called `shim` – can be used for the same purpose and with
-the same functionality.
+the same functionality, so that the command is being accessible practically
+fully normally – not only in the live Zsh session (only within which the
+functions created by `fbin''` exist), but also from any Zsh script.
 
 ## How it works, in detail
 
@@ -112,37 +114,42 @@ After this command, the `$PATH` variable will contain e.g.:
 
 For many such programs loaded as plugins the PATH can become quite cluttered.
 I've had 26 entries before switching to `z-a-bin-gem-node`. To solve this,
-load with use of `fbin''` ice provided and handled by `z-a-bin-gem-node`:
+load with use of `sbin''` ice provided and handled by `z-a-bin-gem-node`:
 
 ```zsh
-zinit ice from"gh-r" fbin"fzf"
+zinit ice from"gh-r" sbin"fzf"
 zinit load junegunn/fzf-bin
 ```
 
-The `$PATH` will remain unchanged and an `fzf` function will be created:
+The `$PATH` will remain unchanged and a `fzf` forwarder-script, so called
+*shim* will be created in `$ZPFX/bin` (`~/.zinit/polaris/bin` by default),
+which is being already added to the `$PATH` by Zinit when it is being
+sourced:
 
 ```zsh
-% which fzf
+% cat `which fzf`
 fzf () {
         local bindir="/home/sg/.zinit/plugins/junegunn---fzf-bin"
         "$bindir"/"fzf" "$@"
 }
+
+fzf "$@"
 ```
 
-Running the function will forward the call to the program accessed through
+Running the script will forward the call to the program accessed through
 an embedded path to it. Thus, no `$PATH` changes are needed!
 
 ## The Ice Modifiers Provided By The Annex
 
 There are 7 ice-modifiers provided and handled by the annex. They are:
-  1. `fbin''` – creates functions for binaries and scripts,
-  2. `sbin''` – creates `shims` for binaries and scripts,
+  1. `sbin''` – creates `shims` for binaries and scripts.
+  2. `fbin''` – creates functions for binaries and scripts.
   3. `gem''` – installs and updates gems + creates functions for gems'
-     binaries,
+     binaries.
   4. `node''` – installs and updates node_modules + creates functions for
-     binaries of the modules,
-  5. `fmod''` – creates wrapping functions for other functions,
-  6. `fsrc''` – creates functions that source given scripts,
+     binaries of the modules.
+  5. `fmod''` – creates wrapping functions for other functions.
+  6. `fsrc''` – creates functions that source given scripts.
   7. `ferc''` – the same as `fsrc''`, but using an alternate script-loading
      method.
 
@@ -150,7 +157,49 @@ There are 7 ice-modifiers provided and handled by the annex. They are:
 
 ---
 
-## 1. **`fbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-function}]; …'`**
+## 1. **`sbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …'`**
+
+It creates the so called `shim` known from `rbenv` – a wrapper script that
+forwards the call to the actual binary. The script is created always under
+the same, standard and single `$PATH` entry: `$ZPFX/bin` (which is
+`~/.zinit/polaris/bin` by default).
+
+The flags have the same meaning as with `fbin''` ice.
+
+Example:
+
+```zsh
+% zinit delete junegunn/fzf-bin
+Delete /home/sg/.zinit/plugins/junegunn---fzf-bin?
+[yY/n…]
+y
+Done (action executed, exit code: 0)
+% zinit ice from"gh-r" sbin"fzf"
+% zinit load junegunn/fzf-bin
+…installation messages…
+% cat $ZPFX/bin/fzf
+#!/usr/bin/env zsh
+
+function fzf {
+    local bindir="/home/sg/.zinit/plugins/junegunn---fzf-bin"
+    "$bindir"/"fzf" "$@"
+}
+
+fzf "$@"
+```
+
+**The ice can be empty**. It will then try to create the shim for:
+
+- trailing component of the `id_as` ice, e.g.: `id_as'exts/git-my'` → it'll
+  check if a file `git-my` exists and if yes, create the shim `git-my`,
+- the plugin name, e.g.: for `paulirish/git-open` it'll check if a file
+  `git-open` exists and if yes, create the shim `git-open`,
+- trailing component of the snippet URL,
+- for any alphabetically first executable file.
+
+---
+
+## 2. **`fbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-function}]; …'`**
 
 Creates a wrapper function of the name the same as the last segment of the
 path or as `{name-of-the-function}`. The optional preceding flags mean:
@@ -281,48 +330,6 @@ myfun () {
 LICENSE
 README.md
 ```
-
----
-
-## 5. **`sbin'[{g|n|c|N|E|O}:]{path-to-binary}[ -> {name-of-the-script}]; …'`**
-
-It creates the so called `shim` known from `rbenv` – a wrapper script that
-forwards the call to the actual binary. The script is created always under
-the same, standard and single `$PATH` entry: `$ZPFX/bin` (which is
-`~/.zinit/polaris/bin` by default).
-
-The flags have the same meaning as with `fbin''` ice.
-
-Example:
-
-```zsh
-% zinit delete junegunn/fzf-bin
-Delete /home/sg/.zinit/plugins/junegunn---fzf-bin?
-[yY/n…]
-y
-Done (action executed, exit code: 0)
-% zinit ice from"gh-r" sbin"fzf"
-% zinit load junegunn/fzf-bin
-…installation messages…
-% cat $ZPFX/bin/fzf
-#!/usr/bin/env zsh
-
-function fzf {
-    local bindir="/home/sg/.zinit/plugins/junegunn---fzf-bin"
-    "$bindir"/"fzf" "$@"
-}
-
-fzf "$@"
-```
-
-**The ice can be empty**. It will then try to create the shim for:
-
-- trailing component of the `id_as` ice, e.g.: `id_as'exts/git-my'` → it'll
-  check if a file `git-my` exists and if yes, create the shim `git-my`,
-- the plugin name, e.g.: for `paulirish/git-open` it'll check if a file
-  `git-open` exists and if yes, create the shim `git-open`,
-- trailing component of the snippet URL,
-- for any alphabetically first executable file.
 
 ---
 
