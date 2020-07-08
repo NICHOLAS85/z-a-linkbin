@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Sebastian Gniazdowski
+# Copyright (c) 2019-2020 Sebastian Gniazdowski
 # License MIT
 
 # According to the Zsh Plugin Standard:
