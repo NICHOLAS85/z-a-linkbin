@@ -38,9 +38,9 @@ if [[ -n "${ZINIT_ICE[gem]}" ]] {
     }
 
     (( ${#gems} )) && {
-        if [[ "$hook" = *atclone ]]; then
+        if [[ $hook = *atclone-<-> ]]; then
             command gem install -q --no-user-install -i "$dir" "${gems[@]}"
-        elif [[ "$hook" = *atpull ]]; then
+        elif [[ $hook = *atpull-<-> ]]; then
             if (( !ICE_OPTS[opt_-q,--quiet] )) {
                 print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the gems...%f"
                 command gem update -q --no-user-install -i "$dir" "${gems[@]}"
