@@ -24,23 +24,23 @@ autoload .za-bgn-bin-or-src-function-body \
     →za-bgn-null-handler
 
 @zinit-register-annex "z-a-bin-gem-node" \
-    hook:\!atload \
+    hook:\!atload-50 \
     →za-bgn-atload-handler \
     →za-bgn-help-handler \
     "fbin''|sbin|sbin''|gem''|node''|fmod''|fsrc''|ferc''" # also register new ices
 
 @zinit-register-annex "z-a-bin-gem-node" \
-    hook:atclone \
+    hook:atclone-50 \
     →za-bgn-atclone-handler \
     →za-bgn-null-handler
 
 @zinit-register-annex "z-a-bin-gem-node" \
-    hook:\%atpull \
+    hook:\%atpull-50 \
     →za-bgn-atclone-handler \
     →za-bgn-null-handler
 
 @zinit-register-annex "z-a-bin-gem-node" \
-    hook:atdelete \
+    hook:atdelete-50 \
     →za-bgn-atdelete-handler \
     →za-bgn-null-handler
 
