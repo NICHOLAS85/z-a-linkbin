@@ -72,9 +72,9 @@ if [[ -n "${ZINIT_ICE[node]}" ]] {
         # Substitute the standard keywords and param''-s
         @zinit-substitute 'srcdst[1]' 'srcdst[2]' 'srcdst[3]'
 
-        if [[ "$hook" = *atclone ]]; then
+        if [[ "$hook" = *atclone-<-> ]]; then
             mods+=( ${srcdst[2]} )
-        elif [[ "$hook" = *atpull && -n ${srcdst[2]} ]]; then
+        elif [[ "$hook" = *atpull-<-> && -n ${srcdst[2]} ]]; then
             perform_update=1
             break
         fi
@@ -188,11 +188,11 @@ if (( ${+ZINIT_ICE[sbin]} )) {
                 if [[ -x $file ]]; then
                     (( !ICE_OPTS[opt_-q,--quiet] )) && \
                         if [[ -x $target_binary ]]; then
-                            if [[ $hook == atclone || $ZINIT[annex-multi-flag:pull-active] -ge  2 ]] {
-                                print -P -- "%F{38}bin-gem-node annex: %F{154}${${${hook:#*atclone}:+Re-c}:-C}reated the %F{219}$fnam%F{154} shim and set +x on the %F{219}${target_binary:t}%F{154} binary%f"
+                            if [[ $hook == atclone-<-> || $ZINIT[annex-multi-flag:pull-active] -ge  2 ]] {
+                                print -P -- "%F{38}bin-gem-node annex: %F{154}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the %F{219}$fnam%F{154} shim and set +x on the %F{219}${target_binary:t}%F{154} binary%f"
                             }
                         else
-                            print -P -- "%F{38}bin-gem-node annex: %F{154}${${${hook:#*atclone}:+Re-c}:-C}reated the %F{219}$fnam%F{154} shim %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
+                            print -P -- "%F{38}bin-gem-node annex: %F{154}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the %F{219}$fnam%F{154} shim %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
                         fi
                 else
                     print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong creating the %F{219}$fnam%F{160} shim%f"
