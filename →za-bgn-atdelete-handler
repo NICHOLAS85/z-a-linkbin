@@ -33,7 +33,7 @@ if (( ${+ZINIT_ICE[sbin]} )) {
                     sbin="$dir/${url:t}"
                 else
                     local -a files
-                    files=( $dir/*(*Non:t) )
+                    files=( $dir/*(*Nnon:t) )
                     if (( ${#files} )); then
                         sbin="${files[1]}"
                     else
@@ -56,7 +56,7 @@ if (( ${+ZINIT_ICE[sbin]} )) {
 
             local -a fnames
             local fname
-            eval "fnames=( ${srcdst[1]}(Nnon) )"
+            eval "fnames=( ${srcdst[1]}(Nnon-.) )"
             for fname ( $fnames ) {
                 srcdst[1]="$fname"
                 local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
