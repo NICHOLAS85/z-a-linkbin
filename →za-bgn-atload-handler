@@ -18,9 +18,9 @@ local nl=$'\n'
 # gem'' ice
 #
 
-if [[ -n "${ZINIT_ICE[gem]}" ]] {
+if [[ -n "${ICE[gem]}" ]] {
     local -a gems srcdst tmpsdst
-    gems=( "${(s.;.)ZINIT_ICE[gem]}" )
+    gems=( "${(s.;.)ICE[gem]}" )
 
     local gem
     integer add_fbin
@@ -42,7 +42,7 @@ if [[ -n "${ZINIT_ICE[gem]}" ]] {
 
         if (( add_fbin )); then
             local target_binary="g:$dir/bin/${srcdst[1]}"
-            ZINIT_ICE[fbin]+="${ZINIT_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
+            ICE[fbin]+="${ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
         fi
     }
 }
@@ -51,9 +51,9 @@ if [[ -n "${ZINIT_ICE[gem]}" ]] {
 # node'' ice
 #
 
-if [[ -n "${ZINIT_ICE[node]}" ]] {
+if [[ -n "${ICE[node]}" ]] {
     local -a nodes srcdst tmpsdst
-    nodes=( "${(s.;.)ZINIT_ICE[node]}" )
+    nodes=( "${(s.;.)ICE[node]}" )
 
     local node
     integer add_fbin
@@ -75,7 +75,7 @@ if [[ -n "${ZINIT_ICE[node]}" ]] {
 
         if (( add_fbin )); then
             local target_binary="n:$dir/node_modules/.bin/${srcdst[1]}"
-            ZINIT_ICE[fbin]+="${ZINIT_ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
+            ICE[fbin]+="${ICE[fbin]:+;}$target_binary -> ${srcdst[3]}"
         fi
     }
 }
@@ -85,11 +85,11 @@ if [[ -n "${ZINIT_ICE[node]}" ]] {
 # or node modules
 #
 
-if (( ${+ZINIT_ICE[fbin]}${+ZINIT_ICE[fsrc]}${+ZINIT_ICE[ferc]} > 0 )) {
+if (( ${+ICE[fbin]}${+ICE[fsrc]}${+ICE[ferc]} > 0 )) {
     local -a fbins fsrcs fercs srcdst
-    fbins=( ${(s.;.)ZINIT_ICE[fbin]} )
-    fsrcs=( ${(s.;.)ZINIT_ICE[fsrc]} )
-    fercs=( ${(s.;.)ZINIT_ICE[ferc]} )
+    fbins=( ${(s.;.)ICE[fbin]} )
+    fsrcs=( ${(s.;.)ICE[fsrc]} )
+    fercs=( ${(s.;.)ICE[ferc]} )
 
     local fbin
     integer run_type=0
@@ -101,9 +101,9 @@ if (( ${+ZINIT_ICE[fbin]}${+ZINIT_ICE[fsrc]}${+ZINIT_ICE[ferc]} > 0 )) {
         [[ "$fbin" = "<sep1>" ]] && { run_type=1; continue; }
         [[ "$fbin" = "<sep2>" ]] && { run_type=2; continue; }
 
-        if [[ ( ${+ZINIT_ICE[fbin]} -eq 1 && run_type -eq 0 && -z $fbin && ${#fbins} -eq 0 ) || \
-            ( ${+ZINIT_ICE[fsrc]} -eq 1 && run_type -eq 1 && -z $fbin && ${#fsrcs} -eq 0 ) || \
-            ( ${+ZINIT_ICE[ferc]} -eq 1 && run_type -eq 2 && -z $fbin && ${#fercs} -eq 0 )
+        if [[ ( ${+ICE[fbin]} -eq 1 && run_type -eq 0 && -z $fbin && ${#fbins} -eq 0 ) || \
+            ( ${+ICE[fsrc]} -eq 1 && run_type -eq 1 && -z $fbin && ${#fsrcs} -eq 0 ) || \
+            ( ${+ICE[ferc]} -eq 1 && run_type -eq 2 && -z $fbin && ${#fercs} -eq 0 )
         ]]; then
             if [[ -f $dir/${id_as:t} ]]; then
                 fbin="$dir/${id_as:t}"
@@ -153,9 +153,9 @@ if (( ${+ZINIT_ICE[fbin]}${+ZINIT_ICE[fsrc]}${+ZINIT_ICE[ferc]} > 0 )) {
 # fmod'' ice
 #
 
-if [[ -n "${ZINIT_ICE[fmod]}" ]] {
+if [[ -n "${ICE[fmod]}" ]] {
     local -a fmods srcdst
-    fmods=( "${(s.;.)ZINIT_ICE[fmod]}" )
+    fmods=( "${(s.;.)ICE[fmod]}" )
 
     local fmod
 

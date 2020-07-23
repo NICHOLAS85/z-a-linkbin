@@ -14,9 +14,9 @@ local nl=$'\n'
 # sbin'' ice – creation of shims (the name borrowed from rbenv)
 #
 
-if (( ${+ZINIT_ICE[sbin]} )) {
+if (( ${+ICE[sbin]} )) {
     local -a sbins srcdst
-    sbins=( ${(s.;.)ZINIT_ICE[sbin]} )
+    sbins=( ${(s.;.)ICE[sbin]} )
 
     local sbin
     integer set_gem_home set_node_path

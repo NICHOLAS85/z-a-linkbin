@@ -14,9 +14,9 @@ if [[ "$1" = plugin ]] {
 
 local nl=$'\n'
 
-if [[ -n "${ZINIT_ICE[gem]}" ]] {
+if [[ -n "${ICE[gem]}" ]] {
     local -a gem_defs srcdst tmpsdst gems
-    gem_defs=( "${(s.;.)ZINIT_ICE[gem]}" )
+    gem_defs=( "${(s.;.)ICE[gem]}" )
 
     local gem
 
@@ -41,7 +41,7 @@ if [[ -n "${ZINIT_ICE[gem]}" ]] {
         if [[ $hook = *atclone-<-> ]]; then
             command gem install -q --no-user-install -i "$dir" "${gems[@]}"
         elif [[ $hook = *atpull-<-> ]]; then
-            if (( !ICE_OPTS[opt_-q,--quiet] )) {
+            if (( !OPTS[opt_-q,--quiet] )) {
                 print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the gems...%f"
                 command gem update -q --no-user-install -i "$dir" "${gems[@]}"
             } else {
@@ -51,9 +51,9 @@ if [[ -n "${ZINIT_ICE[gem]}" ]] {
     }
 }
 
-if [[ -n "${ZINIT_ICE[node]}" ]] {
+if [[ -n "${ICE[node]}" ]] {
     local -a node_defs srcdst tmpsdst mods
-    node_defs=( "${(s.;.)ZINIT_ICE[node]}" )
+    node_defs=( "${(s.;.)ICE[node]}" )
 
     local node
     integer perform_update=0
@@ -86,7 +86,7 @@ if [[ -n "${ZINIT_ICE[node]}" ]] {
     (( perform_update )) && \
         (
             builtin cd -q "$dir" && {
-                if (( !ICE_OPTS[opt_-q,--quiet] )) {
+                if (( !OPTS[opt_-q,--quiet] )) {
                     print -P -- "%F{38}bin-gem-node annex: %F{154}Updating the node modules...%f"
                     command npm --silent update
                 } else {
@@ -100,9 +100,9 @@ if [[ -n "${ZINIT_ICE[node]}" ]] {
 # sbin'' ice – creation of shims (the name borrowed from rbenv)
 #
 
-if (( ${+ZINIT_ICE[sbin]} )) {
+if (( ${+ICE[sbin]} )) {
     local -a sbins srcdst
-    sbins=( ${(s.;.)ZINIT_ICE[sbin]} )
+    sbins=( ${(s.;.)ICE[sbin]} )
 
     local sbin
 
@@ -186,7 +186,7 @@ if (( ${+ZINIT_ICE[sbin]} )) {
                 command chmod +x "$file" "$target_binary"
 
                 if [[ -x $file ]]; then
-                    (( !ICE_OPTS[opt_-q,--quiet] )) && \
+                    (( !OPTS[opt_-q,--quiet] )) && \
                         if [[ -x $target_binary ]]; then
                             if [[ $hook == atclone-<-> || $ZINIT[annex-multi-flag:pull-active] -ge  2 ]] {
                                 print -P -- "%F{38}bin-gem-node annex: %F{154}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the %F{219}$fnam%F{154} shim and set +x on the %F{219}${target_binary:t}%F{154} binary%f"
@@ -202,9 +202,9 @@ if (( ${+ZINIT_ICE[sbin]} )) {
     )
 }
 
-if [[ -n "${ZINIT_ICE[fbin]}" ]] {
+if [[ -n "${ICE[fbin]}" ]] {
     local -a fbins srcdst
-    fbins=( "${(s.;.)ZINIT_ICE[fbin]}" )
+    fbins=( "${(s.;.)ICE[fbin]}" )
 
     local fbin
 
@@ -221,7 +221,7 @@ if [[ -n "${ZINIT_ICE[fbin]}" ]] {
         command chmod +x "$target_binary"
 
         if [[ -x $target_binary ]]; then
-            (( !ICE_OPTS[opt_-q,--quiet] )) && \
+            (( !OPTS[opt_-q,--quiet] )) && \
                 print -P -- "%F{38}bin-gem-node annex: %F{154}Set +x on the %F{219}${target_binary:t}%F{154} binary%f"
         else
             print -P -- "%F{38}bin-gem-node annex: %F{160}Something went wrong setting +x on the %F{219}${target_binary:t}%F{160} binary%f"
