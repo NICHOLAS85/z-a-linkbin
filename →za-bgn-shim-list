@@ -63,6 +63,8 @@ END
 (( !${+functions[.zinit-any-colorify-as-uspl2]} )) && \
     builtin source $ZINIT[BIN_DIR]/zinit-side.zsh
 
+{
+
 if (( !${#opt_from_ices} )) {
     local nl=$'\n' brace='{' quote='"'
     local pattern='(#s)\#!/usr/bin/env zsh
@@ -139,6 +141,11 @@ function * {
     }
 }
 
+} | if (( !${#opt_short} || ${#opt_one_line} )) {
+	cat
+    } else {
+	pr -4 -T
+    }
 }
 
 # vim:ft=zsh:sw=4:sts=4:noet:
