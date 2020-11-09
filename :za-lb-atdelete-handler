@@ -26,13 +26,14 @@ if (( ${+ICE2[lbin]} )) {
     local -a lbins srcdst
     lbins=( ${(s.;.)ICE2[lbin]} )
 
-    local lbin
+    local lbin sym="-P"
 
     (
         # CD for the globbing through eval
         builtin cd -q "$dir" || return
 
         for lbin ( $lbins "" ) {
+            [[ ${lbin[1]} = "!" ]] && sym="-s"
 
             if [[ -z $lbin && ${#lbins} -eq 0 ]] || [[ $lbin = "!" && ${#lbins} -eq 1 ]] {
                 local -a files
