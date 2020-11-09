@@ -1,0 +1,122 @@
+# Copyright (c) 2019-2020 Sebastian Gniazdowski
+# License MIT
+
+:za-lb-atclone-handler() {
+
+emulate -RL zsh
+setopt extendedglob warncreateglobal typesetsilent noshortloops
+
+if [[ "$1" = plugin ]] {
+    local type="$1" user="$2" plugin="$3" id_as="$4" dir="${5#%}" hook="$6"
+} else {
+    local type="$1" url="$2" id_as="$3" dir="${4#%}" hook="$5"
+}
+
+#
+# lbin'' ice – creation of links
+#
+
+if (( ${+ICE[lbin]} )) {
+    (( ${+ICE[sbin]} )) && {
+        (( !OPTS[opt_-q,--quiet] )) && \
+        print -P -- "%F{38}zbin annex: %F{219}sbin%F{160} ice detected, not doing anything%f"
+        return;
+    }
+    local -a lbins srcdst
+    lbins=( ${(s.;.)ICE[lbin]} )
+
+    local lbin sym="-P"
+
+    (
+        # CD for the globbing through eval
+        builtin cd -q "$dir" || return
+
+        for lbin ( $lbins "" ) {
+            [[ ${lbin[1]} = "!" ]] && sym="-s"
+
+            if [[ -z $lbin && ${#lbins} -eq 0 ]] || [[ $lbin = "!" && ${#lbins} -eq 1 ]] {
+                local -a files
+                integer i=0
+                while [[ ! -f $files[1] && $i -lt 9 ]]; do
+                    ((i++))
+                    case $i in
+                        1)
+                            files=( $dir/${id_as:t}(Nnon.) )
+                        ;;
+                        2)
+                            [[ -n $plugin ]] && files=( $dir/$plugin(Nnon.) )
+                        ;;
+                        3)
+                            [[ -n $url ]] && files=( $dir/${url:t}(Nnon.) )
+                        ;;
+                        4)
+                            files=( $dir/*(*Nnon.:t) )
+                        ;;
+                        5)
+                            files=( $dir/**/${id_as:t} )
+                        ;;
+                        6)
+                            [[ -n $plugin ]] && files=( $dir/**/$plugin(Nnon.) )
+                        ;;
+                        7)
+                            [[ -n $url ]] && files=( $dir/**/${url:t}(Nnon.) )
+                        ;;
+                        8)
+                            files=( $dir/**/*(*Nnon.:t) )
+                        ;;
+                        9)
+                            print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty lbin ice didn't find any executable files%f"
+                        ;;
+                    esac
+                done
+                [[ $i -gt 8 ]] && break
+                lbin=$files[1]
+            } else {
+                lbin=${lbin#!}
+                [[ -z $lbin ]] && continue
+            }
+            srcdst=( ${(@s.->.)lbin} )
+            srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
+
+            # Substitute the standard keywords and param''-s
+            @zinit-substitute 'srcdst[1]' 'srcdst[2]'
+
+            local -a fnames
+            local fname
+            eval "fnames=( ${srcdst[1]}(Nnon.) )"
+
+            if (( !${#fnames} )) {
+                print -P -- "%F{38}bin-gem-node annex: %F{160}Warning: %F{154}The lbin'' ice (\`%F{219}$lbin%F{154}') didn't match any files%f"
+                continue
+            }
+
+            for fname ( $fnames ) {
+                srcdst[1]="$fname"
+
+                local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
+                    fnam="${srcdst[2]:-${srcdst[1]:t}}"
+                local file="$ZPFX/bin/$fnam"
+
+                command chmod +x "$target_binary"
+                command ln -f "$sym" "$target_binary" "$file"
+
+                if [[ -x $file ]]; then
+                    (( !OPTS[opt_-q,--quiet] )) && \
+                        if [[ -x $target_binary ]]; then
+                            if [[ $hook == atclone-<-> || $ZINIT[annex-multi-flag:pull-active] -ge  2 ]] {
+                                print -P -- "%F{38}linkbin annex: %F{154}${${${hook:#*atclone-<->}:+Re-i}:-I}nstalled the %F{219}$fnam%F{154} %F{117}${${${sym#-P}:+soft}:-hard}%F{154} link and set +x on the %F{219}${target_binary:t}%F{154} binary%f"
+                            }
+                        else
+                            print -P -- "%F{38}linkbin annex: %F{154}${${${hook:#*atclone-<->}:+Re-i}:-I}nstalled the %F{219}$fnam%F{154} %F{117}${${${sym#-P}:+soft}:-hard}%F{154} link %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
+                        fi
+                else
+                    print -P -- "%F{38}linkbin annex: %F{160}Something went wrong creating the %F{219}$fnam%F{160} link%f"
+                fi
+            }
+        }
+    )
+}
+
+}
+
+# vim:ft=zsh:sw=4:sts=4:et
