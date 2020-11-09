@@ -74,12 +74,12 @@ fzf -> /home/sg/.zinit/plugins/junegunn---fzf-bin/fzf
 Example:
 
 ```zsh
-% zinit ice from"gh-r" lbin"**f"
+% zinit ice from"gh-r" lbin"**fzf -> myfzf"
 % zinit load junegunn/fzf-bin
 …installation messages…
 % ls $ZPFX/bin/
-fzf
-% fzf --version
+myfzf
+% myfzf --version
 0.23.1 (fc7630a)
 ```
 
