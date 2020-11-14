@@ -5,7 +5,7 @@
 :za-lb-atdelete-handler() {
 
 emulate -RL zsh
-setopt extendedglob warncreateglobal typesetsilent noshortloops
+setopt extendedglob warncreateglobal typesetsilent noshortloops nullglob
 
 if [[ "$1" = plugin ]] {
     local type="$1" user="$2" plugin="$3" id_as="$4" dir="${5#%}" hook="$6"
