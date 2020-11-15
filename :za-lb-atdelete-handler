@@ -17,8 +17,8 @@ if [[ "$1" = plugin ]] {
 # lbin'' ice – creation of links
 #
 
-if (( ${+ICE2[lbin]} )) {
-    (( ${+ICE2[sbin]} )) && {
+if (( ${+ICE[lbin]} )) {
+    (( ${+ICE[sbin]} )) && {
         (( !OPTS[opt_-q,--quiet] )) && \
         print -P -- "%F{38}zbin annex: %F{219}sbin%F{160} ice detected, not doing anything%f"
         return;
