@@ -87,7 +87,7 @@ if (( ${+ICE[lbin]} )) {
             eval "fnames=( ${srcdst[1]}(Nnon.) )"
 
             if (( !${#fnames} )) {
-                print -P -- "%F{38}bin-gem-node annex: %F{160}Warning: %F{154}The lbin'' ice (\`%F{219}$lbin%F{154}') didn't match any files%f"
+                print -P -- "%F{38}linkbin annex: %F{160}Warning: %F{154}The lbin'' ice (\`%F{219}$lbin%F{154}') didn't match any files%f"
                 continue
             }
 

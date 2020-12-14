@@ -87,7 +87,7 @@ if (( ${+ICE[lbin]} )) {
             eval "fnames=( ${srcdst[1]}(Nnon.) )"
 
             if (( !${#fnames} )) {
-                print -P -- "%F{38}bin-gem-node annex: %F{160}Warning: %F{154}The lbin'' ice (\`%F{219}$lbin%F{154}') didn't match any files%f"
+                print -P -- "%F{38}linkbin annex: %F{160}Warning: %F{154}The lbin'' ice (\`%F{219}$lbin%F{154}') didn't match any files%f"
                 continue
             }
 
@@ -105,10 +105,10 @@ if (( ${+ICE[lbin]} )) {
                     (( !OPTS[opt_-q,--quiet] )) && \
                         if [[ -x $target_binary ]]; then
                             if [[ $hook == atclone-<-> || $ZINIT[annex-multi-flag:pull-active] -ge  2 ]] {
-                                print -P -- "%F{38}linkbin annex: %F{154}${${${hook:#*atclone-<->}:+Re-i}:-I}nstalled the %F{219}$fnam%F{154} %F{117}${${${sym#-P}:+soft}:-hard}%F{154} link and set +x on the %F{219}${target_binary:t}%F{154} binary%f"
+                                print -P -- "%F{38}linkbin annex: %F{154}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the %F{219}$fnam%F{154} %F{117}${${${sym#-P}:+soft}:-hard}%F{154} link and set +x on the %F{219}${target_binary:t}%F{154} binary%f"
                             }
                         else
-                            print -P -- "%F{38}linkbin annex: %F{154}${${${hook:#*atclone-<->}:+Re-i}:-I}nstalled the %F{219}$fnam%F{154} %F{117}${${${sym#-P}:+soft}:-hard}%F{154} link %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
+                            print -P -- "%F{38}linkbin annex: %F{154}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the %F{219}$fnam%F{154} %F{117}${${${sym#-P}:+soft}:-hard}%F{154} link %F{160}however the %F{219}${target_binary:t}%F{160} binary does not exist or failed to set +x on it%f"
                         fi
                 else
                     print -P -- "%F{38}linkbin annex: %F{160}Something went wrong creating the %F{219}$fnam%F{160} link%f"
