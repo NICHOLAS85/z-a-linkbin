@@ -1,5 +1,5 @@
 # Original work Copyright (c) 2019-2020 Sebastian Gniazdowski
-# Modified work Copyright (c) 2020 Nicholas Serrano
+# Modified work Copyright (c) 2020-2021 Nicholas Serrano
 # License MIT
 
 :za-lb-atdelete-handler() {
@@ -20,7 +20,7 @@ if [[ "$1" = plugin ]] {
 if (( ${+ICE[lbin]} )) {
     (( ${+ICE[sbin]} )) && {
         (( !OPTS[opt_-q,--quiet] )) && \
-        print -P -- "%F{38}zbin annex: %F{219}sbin%F{160} ice detected, not doing anything%f"
+        +zinit-message "{pre}linkbin annex: {ice}sbin{warn} ice detected, not doing anything...{rst}"
         return;
     }
     local -a lbins srcdst
@@ -66,7 +66,7 @@ if (( ${+ICE[lbin]} )) {
                             files=( $dir/**/*(*Nnon.:t) )
                         ;;
                         9)
-                            print -P -- "%F{38}bin-gem-node annex: %F{160}The automatic-empty lbin ice didn't find any executable files%f"
+                            +zinit-message "{pre}linkbin annex: {error}The automatic-empty {ice}lbin{error} ice didn't find any executable files{rst}"
                         ;;
                     esac
                 done
@@ -87,7 +87,7 @@ if (( ${+ICE[lbin]} )) {
             eval "fnames=( ${srcdst[1]}(Nnon.) )"
 
             if (( !${#fnames} )) {
-                print -P -- "%F{38}linkbin annex: %F{160}Warning: %F{154}The lbin'' ice (\`%F{219}$lbin%F{154}') didn't match any files%f"
+                +zinit-message "{pre}linkbin annex: {error}The {ice}lbin{error} ice (\`{glob}$lbin{error}')didn't match any files{rst}"
                 continue
             }
 
@@ -101,12 +101,12 @@ if (( ${+ICE[lbin]} )) {
                     command rm "$file"
                     if ! [[ -f $file ]]; then
                         (( !OPTS[opt_-q,--quiet] )) && \
-                        print -P -- "%F{38}linkbin annex: %F{154}Removed %F{219}$fnam%F{154} %F{117}${${${sym#-P}:+soft}:-hard}%F{154} link%f"
+                        +zinit-message "{pre}linkbin annex: {msg}Removed {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link{rst}"
                     else
-                        print -P -- "%F{38}linkbin annex: %F{160}Something went wrong deleting the %F{219}$fnam%F{160} link%f"
+                        +zinit-message "{pre}linkbin annex: {error}Something went wrong deleting the {obj}$fnam{error} link{rst}"
                     fi
                 } else {
-                    print -P -- "%F{38}linkbin annex: %F{160}The %F{220}$fnam%F{160} %F{117}${${${sym#-P}:+soft}:-hard}%F{160} link didn't exist in \$ZPFX/bin (or isn't a regular file)%f"
+                    +zinit-message "{pre}linkbin annex: {error}The {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link didn't exist in \$ZPFX/bin (or isn't a regular file){rst}"
                 }
             }
         }
