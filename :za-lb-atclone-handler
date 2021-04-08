@@ -2,8 +2,6 @@
 # Modified work Copyright (c) 2020-2021 Nicholas Serrano
 # License MIT
 
-:za-lb-atclone-handler() {
-
 emulate -RL zsh
 setopt extendedglob warncreateglobal typesetsilent noshortloops nullglob
 
@@ -116,8 +114,6 @@ if (( ${+ICE[lbin]} )) {
             }
         }
     )
-}
-
 }
 
 # vim:ft=zsh:sw=4:sts=4:et
