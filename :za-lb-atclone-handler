@@ -18,7 +18,7 @@ if [[ "$1" = plugin ]] {
 if (( ${+ICE[lbin]} )) {
     (( ${+ICE[sbin]} )) && {
         (( !OPTS[opt_-q,--quiet] )) && \
-        +zinit-message "{pre}linkbin annex: {ice}sbin{warn} ice detected, not doing anything...{rst}"
+        +zi-message "{pre}linkbin annex: {ice}sbin{warn} ice detected, not doing anything...{rst}"
         return;
     }
     local -a lbins srcdst
@@ -64,7 +64,7 @@ if (( ${+ICE[lbin]} )) {
                             files=( $dir/**/*(*Nnon.:t) )
                         ;;
                         9)
-                            +zinit-message "{pre}linkbin annex: {error}The automatic-empty {ice}lbin{error} ice didn't find any executable files{rst}"
+                            +zi-message "{pre}linkbin annex: {error}The automatic-empty {ice}lbin{error} ice didn't find any executable files{rst}"
                         ;;
                     esac
                 done
@@ -78,14 +78,14 @@ if (( ${+ICE[lbin]} )) {
             srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
 
             # Substitute the standard keywords and param''-s
-            @zinit-substitute 'srcdst[1]' 'srcdst[2]'
+            @zi-substitute 'srcdst[1]' 'srcdst[2]'
 
             local -a fnames
             local fname
             eval "fnames=( ${srcdst[1]}(Nnon.) )"
 
             if (( !${#fnames} )) {
-                +zinit-message "{pre}linkbin annex: {error}The {ice}lbin{error} ice (\`{glob}$lbin{error}')didn't match any files{rst}"
+                +zi-message "{pre}linkbin annex: {error}The {ice}lbin{error} ice (\`{glob}$lbin{error}')didn't match any files{rst}"
                 continue
             }
 
@@ -102,18 +102,16 @@ if (( ${+ICE[lbin]} )) {
                 if [[ -x $file ]]; then
                     (( !OPTS[opt_-q,--quiet] )) && \
                         if [[ -x $target_binary ]]; then
-                            if [[ $hook == atclone-<-> || $ZINIT[annex-multi-flag:pull-active] -ge  2 ]] {
-                                +zinit-message "{pre}linkbin annex: {msg}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link and set +x on the {obj}${target_binary:t}{msg} binary{rst}"
+                            if [[ $hook == atclone-<-> || $ZI[annex-multi-flag:pull-active] -ge  2 ]] {
+                                +zi-message "{pre}linkbin annex: {msg}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link and set +x on the {obj}${target_binary:t}{msg} binary{rst}"
                             }
                         else
-                            +zinit-message "{pre}linkbin annex: {error}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link however the {obj}${target_binary:t}{error} binary does not exist or failed to set +x on it{rst}"
+                            +zi-message "{pre}linkbin annex: {error}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link however the {obj}${target_binary:t}{error} binary does not exist or failed to set +x on it{rst}"
                         fi
                 else
-                    +zinit-message "{pre}linkbin annex: {error}Something went wrong creating the {obj}$fnam{error} link{rst}"
+                    +zi-message "{pre}linkbin annex: {error}Something went wrong creating the {obj}$fnam{error} link{rst}"
                 fi
             }
         }
     )
 }
-
-# vim:ft=zsh:sw=4:sts=4:et

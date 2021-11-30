@@ -13,24 +13,24 @@ autoload :za-lb-atclone-handler :za-lb-atdelete-handler
 # An empty stub to fill the help handler fields
 :za-lb-null-handler() { :; }
 
-#@zinit-register-annex "z-a-linkbin" \
+#@zi-register-annex "z-a-linkbin" \
 #    subcommand:link-list \
 #    :za-lb-list \
 #    :za-lb-help-handler
 
 
-@zinit-register-annex "z-a-linkbin" \
+@zi-register-annex "z-a-linkbin" \
     hook:atclone-50 \
     :za-lb-atclone-handler \
     :za-lb-null-handler \
     "lbin|lbin''" # also register new ices
 
-@zinit-register-annex "z-a-linkbin" \
+@zi-register-annex "z-a-linkbin" \
     hook:\%atpull-50 \
     :za-lb-atclone-handler \
     :za-lb-null-handler
 
-@zinit-register-annex "z-a-linkbin" \
+@zi-register-annex "z-a-linkbin" \
     hook:atdelete-50 \
     :za-lb-atdelete-handler \
     :za-lb-null-handler

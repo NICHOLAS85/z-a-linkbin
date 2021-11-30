@@ -1,32 +1,32 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
 - [z-a-linkbin](#z-a-linkbin)
-  - [Introduction](#introduction)
+- [Introduction](#introduction)
   - [Installation](#installation)
   - [How it works](#how-it-works)
   - [The Ice Modifiers Provided By The Annex](#the-ice-modifiers-provided-by-the-annex)
   - [1. **`lbin'[!]{path-to-binary}[ -> {name-of-the-script}]; …'`**](#1-lbinpath-to-binary---name-of-the-script-)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # z-a-linkbin
 
-## Introduction
+# Introduction
 
-A Zsh-Zinit annex (i.e. an extension) that provides functionality, which
+> **[?]**
+> Original author of this repository is NICHOLAS85
+>
+> This repository not compatible with previous version of ZI.
+> Please upgrade to [ZI](https://github.com/z-shell/zi).
+
+A Zsh ZI annex (i.e. an extension) that provides functionality, which
 allows to:
 
-  1. Run programs and scripts without adding anything to `$PATH` via
-     the automatic creation of **links** in `$ZPFX/bin`
+1. Run programs and scripts without adding anything to `$PATH` via
+   the automatic creation of **links** in `$ZPFX/bin`
 
 ## Installation
 
 Simply load like a regular plugin, i.e.:
 
 ```zsh
-zinit light NICHOLAS85/z-a-linkbin
+zi light z-shell/z-a-linkbin
 ```
 
 After executing this command you can then use the new ice-mods provided by
@@ -44,7 +44,8 @@ Zsh session, but also from any Zsh script.
 ## The Ice Modifiers Provided By The Annex
 
 There is 1 ice-modifier provided and handled by this annex. They are:
-  1. `lbin''` – creates `links` for binaries and scripts.
+
+1. `lbin''` – creates `links` for binaries and scripts.
 
 **The ice-modifier in detail:**
 
@@ -54,28 +55,29 @@ There is 1 ice-modifier provided and handled by this annex. They are:
 
 It creates the `link` that calls the actual binary. The link is
 created always under the same, standard and single `$PATH` entry:
-`$ZPFX/bin` (which is `~/.zinit/polaris/bin` by default).
+`$ZPFX/bin` (which is `~/.zi/polaris/bin` by default).
 
 The optional preceding `!` flag means create a soft link instead of a hard link.
 
 Example:
 
 ```zsh
-% zinit ice from"gh-r" lbin"!fzf"
-% zinit load junegunn/fzf-bin
+% zi ice from"gh-r" lbin"!fzf"
+% zi load junegunn/fzf-bin
 …installation messages…
 % ls -l $ZPFX/bin/ | awk '{print $(NF-2),$(NF-1),$NF}'
-fzf -> /home/sg/.zinit/plugins/junegunn---fzf-bin/fzf
+fzf -> /home/sg/.zi/plugins/junegunn---fzf-bin/fzf
 % fzf --version
 0.23.1 (fc7630a)
 ```
+
 **The ice can contain globs**. It will expand these when searching for the binary.
 
 Example:
 
 ```zsh
-% zinit ice from"gh-r" lbin"**fzf -> myfzf"
-% zinit load junegunn/fzf-bin
+% zi ice from"gh-r" lbin"**fzf -> myfzf"
+% zi load junegunn/fzf-bin
 …installation messages…
 % ls $ZPFX/bin/
 myfzf

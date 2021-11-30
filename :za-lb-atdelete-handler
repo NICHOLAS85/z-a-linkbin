@@ -18,7 +18,7 @@ if [[ "$1" = plugin ]] {
 if (( ${+ICE[lbin]} )) {
     (( ${+ICE[sbin]} )) && {
         (( !OPTS[opt_-q,--quiet] )) && \
-        +zinit-message "{pre}linkbin annex: {ice}sbin{warn} ice detected, not doing anything...{rst}"
+        +zi-message "{pre}linkbin annex: {ice}sbin{warn} ice detected, not doing anything...{rst}"
         return;
     }
     local -a lbins srcdst
@@ -64,7 +64,7 @@ if (( ${+ICE[lbin]} )) {
                             files=( $dir/**/*(*Nnon.:t) )
                         ;;
                         9)
-                            +zinit-message "{pre}linkbin annex: {error}The automatic-empty {ice}lbin{error} ice didn't find any executable files{rst}"
+                            +zi-message "{pre}linkbin annex: {error}The automatic-empty {ice}lbin{error} ice didn't find any executable files{rst}"
                         ;;
                     esac
                 done
@@ -78,14 +78,14 @@ if (( ${+ICE[lbin]} )) {
             srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
 
             # Substitute the standard keywords and param''-s
-            @zinit-substitute 'srcdst[1]' 'srcdst[2]'
+            @zi-substitute 'srcdst[1]' 'srcdst[2]'
 
             local -a fnames
             local fname
             eval "fnames=( ${srcdst[1]}(Nnon.) )"
 
             if (( !${#fnames} )) {
-                +zinit-message "{pre}linkbin annex: {error}The {ice}lbin{error} ice (\`{glob}$lbin{error}')didn't match any files{rst}"
+                +zi-message "{pre}linkbin annex: {error}The {ice}lbin{error} ice (\`{glob}$lbin{error}')didn't match any files{rst}"
                 continue
             }
 
@@ -99,16 +99,14 @@ if (( ${+ICE[lbin]} )) {
                     command rm "$file"
                     if ! [[ -f $file ]]; then
                         (( !OPTS[opt_-q,--quiet] )) && \
-                        +zinit-message "{pre}linkbin annex: {msg}Removed {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link{rst}"
+                        +zi-message "{pre}linkbin annex: {msg}Removed {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link{rst}"
                     else
-                        +zinit-message "{pre}linkbin annex: {error}Something went wrong deleting the {obj}$fnam{error} link{rst}"
+                        +zi-message "{pre}linkbin annex: {error}Something went wrong deleting the {obj}$fnam{error} link{rst}"
                     fi
                 } else {
-                    +zinit-message "{pre}linkbin annex: {error}The {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link didn't exist in \$ZPFX/bin (or isn't a regular file){rst}"
+                    +zi-message "{pre}linkbin annex: {error}The {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link didn't exist in \$ZPFX/bin (or isn't a regular file){rst}"
                 }
             }
         }
     )
 }
-
-# vim:ft=zsh:sw=4:sts=4:et
