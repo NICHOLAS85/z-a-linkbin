@@ -18,8 +18,7 @@
 A Zsh ZI annex (i.e. an extension) that provides functionality, which
 allows to:
 
-1. Run programs and scripts without adding anything to `$PATH` via
-   the automatic creation of **links** in `$ZPFX/bin`
+1. Run programs and scripts without adding anything to `$PATH` via the automatic creation of **links** in `$ZPFX/bin`
 
 ## Installation
 
