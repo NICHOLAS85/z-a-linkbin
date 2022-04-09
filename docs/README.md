@@ -1,24 +1,82 @@
+<table style="align:center;width:100%;height:auto">
+<tr><td align="center">
+  <h1>
+    <a href="https://github.com/z-shell/zi">
+      <img style="align:center;width:80px;height:auto" src="https://github.com/z-shell/zi/raw/main/docs/images/logo.svg" />
+    </a>❮ ZI ❯ Annex - Eval
+  </h1>
+<h2>Run programs and scripts without adding anything to <code>$PATH</code> via the automated <b>links</b> to <code>$ZPFX/bin</code>
+</h2>
+    <img align="center" src="img/linkbin.png" alt="eval preview" />
+  </td>
+</tr>
+</table>
 
-# ZI Annex `LINKBIN`
+## Install
 
-### Author: [NICHOLAS85](https://github.com/NICHOLAS85)
-
-### **Wiki:** [z-a-linkbin](https://github.com/z-shell/zi/wiki/z-a-linkbin)
-
-
-## Introduction
-
-A Zsh ZI annex (i.e. an extension) that provides functionality, which allows to:
-
-1. Run programs and scripts without adding anything to `$PATH` via the automatic creation of **links** in `$ZPFX/bin`
-
-## Install linkbin
-
-Simply load like a regular plugin, i.e.:
-
-```zsh
+```shell
 zi light z-shell/z-a-linkbin
 ```
 
-After executing this command you can then use the new ice-mods provided by
-the annex.
+## 💡 Wiki
+
+- [annexes](https://z.digitalclouds.dev/docs/ecosystem/annexes)
+
+## How it works
+
+Exposing a binary program without modifying `$PATH` – `z-a-linkbin` will automatically create a hard or soft link to the binary in `$ZPFX/bin` exposing the program to the command line as if it were being placed in `$PATH`.
+
+The command can then be accessed normally – not only in the live Zsh session, but also from any Zsh script.
+
+The ice-modifier `lbin''` provided by the annex creates `links` for binaries and scripts.
+
+It creates the `link` that calls the actual binary. The link is created always under the same, standard and single `$PATH` entry: `$ZPFX/bin`
+
+> The optional preceding `!` flag means create a soft link instead of a hard link.
+
+Example:
+
+```shell
+zi ice from'gh-r' lbin'!fzf'
+zi load junegunn/fzf
+```
+
+Check the output:
+
+```shell
+ls -l $ZPFX/bin/ | awk '{print $(NF-2),$(NF-1),$NF}'
+fzf --version
+```
+
+**The ice can contain globs**. It will expand these when searching for the binary.
+
+Example:
+
+```shell
+zi ice from'gh-r' lbin'**fzf -> myfzf'
+zi load junegunn/fzf
+```
+
+Check the output:
+
+```shell
+ls $ZPFX/bin
+myfzf --version
+```
+
+**The ice can be empty**. It will then try to create the link:
+
+- trailing component of the `id_as` ice, e.g.: `id_as'exts/git-my'` → it will check if a file `git-my` exists and if yes, create the link `git-my`,
+- the plugin name, e.g.: for `paulirish/git-open` it'll check if a file `git-open` exists and if yes, create the link `git-open`,
+- trailing component of the snippet URL,
+- for any alphabetically first executable file.
+
+Above also applies if just `!` were passed.
+
+---
+
+> This repository compatible with [ZI](https://github.com/z-shell/zi).
+
+## Credits
+
+Author: [NICHOLAS85](https://github.com/NICHOLAS85)
