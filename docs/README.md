@@ -3,7 +3,7 @@
   <h1>
     <a href="https://github.com/z-shell/zi">
       <img style="align:center;width:80px;height:auto" src="https://github.com/z-shell/zi/raw/main/docs/images/logo.svg" />
-    </a>❮ ZI ❯ Annex - Eval
+    </a>❮ ZI ❯ Annex - LinkBin
   </h1>
 <h2>Run programs and scripts without adding anything to <code>$PATH</code> via the automated <b>links</b> to <code>$ZPFX/bin</code>
 </h2>
