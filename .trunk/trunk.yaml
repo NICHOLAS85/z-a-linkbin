@@ -1,8 +1,18 @@
 version: 0.1
 cli:
-  version: 0.9.3-beta
+  version: 0.12.1-beta
+repo:
+  repo:
+    host: github.com
+    owner: z-shell
+    name: z-a-linkbin
 lint:
+  linters:
+    - name: markdownlint
+      command: [markdownlint, -q, --config, .github/.markdownlint.yaml, "${target}"]
+      direct_configs: [.github/.markdownlint.yaml]
   enabled:
+    - actionlint@1.6.9
     - gitleaks@8.3.0
     - markdownlint@0.31.1
     - prettier@2.5.1

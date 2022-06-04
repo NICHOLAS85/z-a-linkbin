@@ -37,7 +37,7 @@ It creates the `link` that calls the actual binary. The link is created always u
 Example:
 
 ```shell
-zi ice from'gh-r' lbin'!fzf'
+zi ice from'gh-r' as'program' lbin'!fzf'
 zi load junegunn/fzf
 ```
 
@@ -53,7 +53,7 @@ fzf --version
 Example:
 
 ```shell
-zi ice from'gh-r' lbin'**fzf -> myfzf'
+zi ice from'gh-r' as'program' lbin'**fzf -> myfzf'
 zi load junegunn/fzf
 ```
 
