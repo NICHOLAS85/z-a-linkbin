@@ -90,8 +90,7 @@
         }
         for fname ( $fnames ) {
           srcdst[1]="$fname"
-          local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
-            fnam="${srcdst[2]:-${srcdst[1]:t}}"
+          local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" fnam="${srcdst[2]:-${srcdst[1]:t}}"
           local file="$ZPFX/bin/$fnam"
           command chmod +x "$target_binary"
           command ln -f "$sym" "$target_binary" "$file"
@@ -99,13 +98,13 @@
             (( !OPTS[opt_-q,--quiet] )) && \
             if [[ -x $target_binary ]]; then
               if [[ $hook == atclone-<-> || $ZI[annex-multi-flag:pull-active] -ge  2 ]] {
-                +zi-message "{annex}linkbin-annex{ehi}:{rst} {msg}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link and set +x on the {obj}${target_binary:t}{msg} binary{rst}"
+                +zi-message "{annex}linkbin-annex{ehi}:{rst} {msg}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {pname}$fnam{msg} ${${${sym#-P}:+soft}:-hard}{msg} link and set {opt}+x{msg} on the {pname}${target_binary:t}{msg} binary{rst}"
               }
             else
-              +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link however the {obj}${target_binary:t}{error} binary does not exist or failed to set +x on it{rst}"
+              +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {pname}$fnam{msg} ${${${sym#-P}:+soft}:-hard}{error} link however the {pname}${target_binary:t}{error} binary does not exist or failed to set +x on it{rst}"
             fi
           else
-            +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}Something went wrong creating the {obj}$fnam{error} link{rst}"
+            +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}Something went wrong creating the {pname}$fnam{error} link{rst}"
           fi
         }
       }

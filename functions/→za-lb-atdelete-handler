@@ -96,12 +96,12 @@
             command rm "$file"
             if ! [[ -f $file ]]; then
               (( !OPTS[opt_-q,--quiet] )) && \
-              +zi-message "{annex}linkbin-annex{ehi}:{rst} {msg}Removed {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link{rst}"
+              +zi-message "{annex}linkbin-annex{ehi}:{rst} {msg}Removed {pname}$fnam{msg} ${${${sym#-P}:+soft}:-hard}{msg} link{rst}"
             else
-              +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}Something went wrong deleting the {obj}$fnam{error} link{rst}"
+              +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}Something went wrong deleting the {pname}$fnam{error} link{rst}"
             fi
           } else {
-            +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}The {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link didn't exist in \$ZPFX/bin (or isn't a regular file){rst}"
+            +zi-message "{annex}linkbin-annex{ehi}:{rst} {error}The {pname}$fnam{msg} ${${${sym#-P}:+soft}:-hard}{error} link didn't exist in \$ZPFX/bin (or isn't a regular file){rst}"
           }
         }
       }
