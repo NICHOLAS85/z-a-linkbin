@@ -8,7 +8,7 @@
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
-[[ -d $ZPFX/bin ]] || command mkdir -p $ZPFX/bin
+[[ -d $ZPFX/bin ]] || command mkdir -p "$ZPFX/bin"
 
 autoload :za-lb-atclone-handler :za-lb-atdelete-handler
 
