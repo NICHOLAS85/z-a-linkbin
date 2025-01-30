@@ -1,119 +1,90 @@
+#
+#!/usr/bin/env zsh
 # Original work Copyright (c) 2019-2020 Sebastian Gniazdowski
 # Modified work Copyright (c) 2020-2021 Nicholas Serrano
-# License MIT
-
-emulate -RL zsh
-setopt extendedglob warncreateglobal typesetsilent noshortloops nullglob
-
-if [[ "$1" = plugin ]] {
-    local type="$1" user="$2" plugin="$3" id_as="$4" dir="${5#%}" hook="$6"
-} else {
-    local type="$1" url="$2" id_as="$3" dir="${4#%}" hook="$5"
-}
-
-#
-# lbin'' ice – creation of links
+# Modified work Copyright (c) 2022 zdharma-continuum and contributors
 #
 
-if (( ${+ICE[lbin]} )) {
-    (( ${+ICE[sbin]} )) && {
-        (( !OPTS[opt_-q,--quiet] )) && \
-        +zinit-message "{pre}linkbin annex: {ice}sbin{warn} ice detected, not doing anything...{rst}"
-        return;
-    }
-    local -a lbins srcdst
-    lbins=( ${(s.;.)ICE[lbin]} )
+emulate -LR zsh
+setopt extendedglob warncreateglobal typesetsilent noshortloops
 
-    local lbin sym="-P"
+if [[ "$1" = plugin ]]; then
+    local type="$1" user="$2" plugin="$3" id_as="$4" dir="${5#%}" hook="$6" 
+else
+    local type="$1" url="$2" id_as="$3" dir="${4#%}" hook="$5" 
+fi
 
+if (( ${+ICE[lbin]} )); then
+    if (( ${+ICE[sbin]} )); then
+        +zi-log "{m} {b}linkbin{rst}: {ice}sbin{rst} ice detected, not doing anything"
+        return 0
+    fi
     (
-        # CD for the globbing through eval
+        local lbin sym="-P" 
+        local -a lbins srcdst
+        lbins=(${(s.;.)ICE[lbin]}) 
         builtin cd -q "$dir" || return
-
-        for lbin ( $lbins "" ) {
-            [[ ${lbin[1]} = "!" ]] && sym="-s"
-
-            if [[ -z $lbin && ${#lbins} -eq 0 ]] || [[ $lbin = "!" && ${#lbins} -eq 1 ]] {
+        for lbin in $lbins ""; do
+            [[ ${lbin[1]} = "!" ]] && sym="-s" 
+            if [[ -z $lbin && ${#lbins} -eq 0 ]] || [[ $lbin = "!" && ${#lbins} -eq 1 ]]; then
                 local -a files
-                integer i=0
-                while [[ ! -f $files[1] && $i -lt 9 ]]; do
+                integer i=0 
+                while [[ ! -f $files[1] && $i -lt 10 ]]; do
                     ((i++))
                     case $i in
-                        1)
-                            files=( $dir/${id_as:t}(Nnon.) )
-                        ;;
-                        2)
-                            [[ -n $plugin ]] && files=( $dir/$plugin(Nnon.) )
-                        ;;
-                        3)
-                            [[ -n $url ]] && files=( $dir/${url:t}(Nnon.) )
-                        ;;
-                        4)
-                            files=( $dir/*(*Nnon.:t) )
-                        ;;
-                        5)
-                            files=( $dir/**/${id_as:t} )
-                        ;;
-                        6)
-                            [[ -n $plugin ]] && files=( $dir/**/$plugin(Nnon.) )
-                        ;;
-                        7)
-                            [[ -n $url ]] && files=( $dir/**/${url:t}(Nnon.) )
-                        ;;
-                        8)
-                            files=( $dir/**/*(*Nnon.:t) )
-                        ;;
-                        9)
-                            +zinit-message "{pre}linkbin annex: {error}The automatic-empty {ice}lbin{error} ice didn't find any executable files{rst}"
-                        ;;
+                        (1) files=($dir/${id_as:t}(Nnon.))  ;;
+                        (2) [[ -n $plugin ]] && files=($dir/$plugin(Nnon.))  ;;
+                        (3) [[ -n $url ]] && files=($dir/${url:t}(Nnon.))  ;;
+                        (4) files=($dir/*/*(*Nnon.:t))  ;;
+                        (5) files=($dir/**/*(*Nnon.:t))  ;;
+                        (6) files=($dir/**/${id_as:t}(Nnon.))  ;;
+                        (7) [[ -n $plugin ]] && files=($dir/**/$plugin(Nnon.))  ;;
+                        (8) [[ -n $url ]] && files=($dir/**/${url:t}(Nnon.))  ;;
+                        (9) files=($dir/**/*(*Nnon.:t))  ;;
+                        (10) +zi-log "{e} {b}linkbin{rst}: {ice}lbin{rst} ice did not detect any executable files" ;;
                     esac
                 done
-                [[ $i -gt 8 ]] && break
-                lbin=$files[1]
-            } else {
-                lbin=${lbin#!}
+                [[ $i -gt 9 ]] && break
+                lbin=$files[1] 
+            else
+                lbin=${lbin#!} 
                 [[ -z $lbin ]] && continue
-            }
-            srcdst=( ${(@s.->.)lbin} )
-            srcdst=( "${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" )
-
-            # Substitute the standard keywords and param''-s
-            @zinit-substitute 'srcdst[1]' 'srcdst[2]'
-
+            fi
+            srcdst=(${(@s.->.)lbin}) 
+            srcdst=("${srcdst[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}") 
+            @zinit-substitute "srcdst[1]" "srcdst[2]"
             local -a fnames
             local fname
-            eval "fnames=( ${srcdst[1]}(Nnon.) )"
-
-            if (( !${#fnames} )) {
-                +zinit-message "{pre}linkbin annex: {error}The {ice}lbin{error} ice (\`{glob}$lbin{error}')didn't match any files{rst}"
+            if [[ $srcdst[1] != /* ]]; then
+                eval "fnames=(**/${srcdst[1]}(Nnon-.))"
+            else
+                eval "fnames=(${srcdst[1]}(Nnon-.))"
+            fi
+            if (( !${#fnames} )); then
+                +zi-log "{e} {b}linkbin{rst}: {ice}lbin{rst} ice ({glob}$lbin{rst}) did not match any files"
                 continue
-            }
-
-            for fname ( $fnames ) {
-                srcdst[1]="$fname"
-
-                local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" \
-                    fnam="${srcdst[2]:-${srcdst[1]:t}}"
-                local file="$ZPFX/bin/$fnam"
-
+            fi
+            for fname in $fnames; do
+                srcdst[1]="$fname" 
+                local target_binary="${${(M)srcdst[1]:#/*}:-$dir/${srcdst[1]}}" 
+                local fnam="${srcdst[2]:-${srcdst[1]:t}}" 
+                local file="$ZPFX/bin/$fnam" 
                 command chmod +x "$target_binary"
                 command ln -f "$sym" "$target_binary" "$file"
-
                 if [[ -x $file ]]; then
-                    (( !OPTS[opt_-q,--quiet] )) && \
-                        if [[ -x $target_binary ]]; then
-                            if [[ $hook == atclone-<-> || $ZINIT[annex-multi-flag:pull-active] -ge  2 ]] {
-                                +zinit-message "{pre}linkbin annex: {msg}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{msg} link and set +x on the {obj}${target_binary:t}{msg} binary{rst}"
-                            }
-                        else
-                            +zinit-message "{pre}linkbin annex: {error}${${${hook:#*atclone-<->}:+Re-c}:-C}reated the {obj}$fnam{data2} ${${${sym#-P}:+soft}:-hard}{error} link however the {obj}${target_binary:t}{error} binary does not exist or failed to set +x on it{rst}"
+                    if [[ -x $target_binary ]]; then
+                        if (( !OPTS[opt_-q,--quiet] )) && [[ $hook == atclone-<-> || $ZINIT[annex-multi-flag:pull-active] -ge 1 ]]; then
+                            +zi-log "{m} {b}linkbin{rst}: ${${${hook:#*atclone-<->}:+Re-c}:-C}reated {file}$fnam{rst} ${${${sym#-P}:+soft}:-hard} link & set +x on the {file}${target_binary:t}{rst} binary"
                         fi
+                    else
+                        +zi-log "{m} {b}linkbin{rst}: ${${${hook:#*atclone-<->}:+Re-c}:-C}reated {file}$fnam{rst} ${${${sym#-P}:+soft}:-hard} link, but {file}${target_binary:t}{rst} binary does not exist or failed to set +x on it"
+                    fi
                 else
-                    +zinit-message "{pre}linkbin annex: {error}Something went wrong creating the {obj}$fnam{error} link{rst}"
+                    +zi-log "{e} {b}linkbin{rst}: Failed to create {file}$fnam{rst} link"
                 fi
-            }
-        }
+            done
+        done
     )
-}
+fi
 
-# vim:ft=zsh:sw=4:sts=4:et
+# vim: set expandtab filetype=zsh shiftwidth=4 softtabstop=4 tabstop=4:
